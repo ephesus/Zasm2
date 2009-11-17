@@ -1,0 +1,17 @@
+ZASM z80 Assembler
+by James Lee Rubingh
+------------------
+
+This is a mini-assembler for unix, designed specifically
+for the ti-series calculator and it's respective games.
+
+It's a single pass assembler in the sense that it never
+writes anything to disk until assembly is comlete. A
+representation of the code is made in RAM with holes
+for forward references, then when all labels have been
+found it attempts to go back and patch up holes. Therefore
+big files will use more ram.
+
+
+
+Bugfixes, Patches, Etc -> james@wrive.com
