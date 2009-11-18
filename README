@@ -3,12 +3,10 @@ z80 assembler
 By james rubingh
 http://www.wrive.com
 
-Released under the GPL.
-
 This project is now using git instead of cvs. The sourceforge repository
 still exists for cvs, but it will be out of date as of June 25, 2009.
 
 patches and comments are always welcome. I dont know much about
 assembler design, so i'm sure it's pretty ugly.
 
-
+Zasm is Copyright James Rubingh (2007) and released under the GPL.
