@@ -17,3 +17,12 @@ distclean:
 	rm -f config.h;
 	rm -f Makefile;
 	rm -f config.log
+
+install:
+	for dir in ${SUBDIRS}; do \
+	 (cd $$dir; ${MAKE} install); \
+	done
+
+uninstall:
+	 (cd src; ${MAKE} uninstall);
+
