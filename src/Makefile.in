@@ -9,6 +9,7 @@ all:	help.o zasm.o
 
 clean:
 	rm -f *.o
+	rm -f *.swp
 	rm -f *~
 	rm -f *\#
 	rm -f zasm
