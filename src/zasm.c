@@ -27,10 +27,7 @@ struct label_entry *label_current;
 
 void strip_comment(char *ptr)
 {
-  /*! replace any ; or \n with a terminating null
-    not sure if there is a library function
-    that does this. Will have to be replaced
-    eventually if support for unicode is added */
+  /*! replace any ; or \n with a terminating null */
   while (*ptr != '\0') {
     if ((*ptr == ';')||(*ptr == '\n')||(*ptr == ':')) {
       *ptr = '\0';
@@ -165,9 +162,6 @@ int main(int ac, char **av)
   /* read table file */
   tab_root = read_table(tabfile);
 
-  /* Do two passes through the code, get a binary from
-     the assembly code, and a linked list of the program
-     instructions. */
   assemble(tab_root, infile);
 
   return 0;
