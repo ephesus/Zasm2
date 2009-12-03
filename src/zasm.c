@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <string.h>
+#include <errno.h>
 #include "../config.h"
 
 #include "../include/zasm.h"
@@ -36,6 +37,22 @@ void strip_comment(char *ptr)
 
     ptr++;
   }
+}
+
+void do_error() {
+    printf("Error Occurred - Closing\n");
+    free_lists();
+    exit(EIO);
+}
+
+void do_error_msg(char *message) {
+    printf("Error: %s\n", message);
+    free_lists();
+    exit(EIO);
+}
+
+void free_lists() {
+
 }
 
 /*! parse the table file and create a list 
