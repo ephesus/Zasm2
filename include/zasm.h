@@ -10,6 +10,7 @@
 #define whitespace " \t\r\n,"
 #define tab_whitespace " \t\r\n"
 #define DEBUG 
+#define ERR_PARSE "Couldn't parse"
 
 typedef unsigned char byte;
 
@@ -45,6 +46,7 @@ struct label_entry {
 extern int verbose;
 extern int tiprog;
 extern int tistring;
+extern double linenumber; 
 extern struct label_entry *label_root;
 extern struct label_entry *label_current;
 extern struct label_entry *label_latest_unset;
@@ -60,7 +62,6 @@ extern int pass(struct instruction *, struct tab_entry *, FILE * infile);
 
 /* help.c */
 extern void show_help(int ) __attribute__((__noreturn__));
-
 
 #endif
 

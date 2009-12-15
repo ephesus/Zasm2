@@ -17,9 +17,12 @@
 
 #include "pass.h"
 
+/* starting new file */
 int assemble(struct tab_entry *tabroot, FILE *infile)
 {
   int result = 0;
+  linenumber = 0;
+
   struct instruction *root;
 
   root = pass_first(infile, tabroot);
@@ -104,6 +107,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
 
   while (fgets(buffer, INSTRUCTION_BUFFER_SIZE, infile)) {
     strip_comment(buffer);
+    linenumber++;
 
     if (isblank(buffer[0]) || (buffer[0] == '\n')) {
       /** if the first char is blank, treat as an instruction
@@ -162,8 +166,11 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
       /* the first char wasnt blank, so see if it's a label
        * or a declaration or whatever
        */
-      if (validate_label(buffer)) 
+      if (validate_label(buffer)) {
         attach_label(buffer, cur);
+      } else {
+        do_error_msg(ERR_PARSE);
+      }
     }
 
   }
@@ -192,11 +199,12 @@ void attach_label(char *ptr, struct instruction *inst) {
 /* make sure that the label is a valid label with ascii chars
  * if it's not valid, return a false */
 int validate_label(char *ptr) {
+  int valid = 1;
   while (*ptr != '\0') {
-    if (isalpha(*ptr++))
-      return 1;
+    if (!isalnum(*ptr++))
+      valid = 0;
   }
-  return 0;
+  return valid;
 }
 
 /**  Go back through the instruction tree and using the list of
