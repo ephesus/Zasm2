@@ -57,8 +57,7 @@ struct tab_entry *match_opcode(struct instruction *instruction)
   struct tab_entry *tmp_tab = NULL;
 
   printf("%s - ", instruction->mnumonic);
-  printf("%ul\n", instruction->opcode);
-
+  printf("%u\n", instruction->opcode);
 
   return tmp_tab;
 }
@@ -144,10 +143,6 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
         /* check for operands */
         cur_op_num = 0;
         while ((buf = (char *) strtok(NULL, whitespace))) {
-#ifdef DEBUG
-          printf(":opnd: %s\n", buf);
-#endif
-
           if (!cur->operands) 
             cur->operands = (char **) malloc(sizeof( char *));
           else 
@@ -219,12 +214,19 @@ int pass_second(struct instruction *root)
 {
   struct label_entry *cur = NULL;
   struct instruction *instd = NULL;
+	int i = 0;
 
   cur = label_root;
   while (cur) {
-    printf("label: %s  :\n", cur->name);
     instd = cur->instruction;
+
+#ifdef DEBUG
+    printf("label: %s  :\n", cur->name);
     printf("   inst: %s  :\n", instd->mnumonic);
+		for(i = 0; i < instd->op_num; i++) {
+    	printf("      :opnd: %s\n", instd->operands[i]);
+		}
+#endif
 
     cur = cur->next;
   }
