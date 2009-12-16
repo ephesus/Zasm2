@@ -168,15 +168,15 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
       cur->operands = NULL;
 
     } else {
-      /* the first char wasnt blank, so see if it's a label
-       * or a declaration or whatever
-       */
-      if (validate_label(buffer)) {
-        attach_label(buffer, cur);
-      } else {
-        do_error_msg(ERR_PARSE);
-      }
-    }
+      /* see if it's a valid label */
+			if (strlen(buffer) > 0) {
+      	if (validate_label(buffer)) {
+        	attach_label(buffer, cur);
+      	} else {
+        	do_error_msg(ERR_PARSE);
+      	}
+    	}
+		}
 
   }
 
@@ -199,6 +199,7 @@ void attach_label(char *ptr, struct instruction *inst) {
   label_current = tmp;
   tmp->name = (char *)malloc(strlen(ptr) * sizeof(char));
   strcpy(tmp->name, ptr);
+	printf("attaching %s\n", ptr);
 }
 
 /* make sure that the label is a valid label with ascii chars
