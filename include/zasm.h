@@ -1,6 +1,6 @@
 /* 
    This is a zasm header file.   
- */
+   */
 
 #ifndef ZASM_H
 #define ZASM_H
@@ -11,35 +11,36 @@
 #define tab_whitespace " \t\r\n"
 #define DEBUG 
 #define ERR_PARSE "Couldn't parse"
+#define ERR_MALLOC "Out of Memory"
 
 typedef unsigned char byte;
 
 struct instruction {
-  char mnumonic[6];
-  char **operands;
-  unsigned int opcode;
-  unsigned short int op_num;
-  struct instruction *next, *previous;
+    char mnumonic[6];
+    char **operands;
+    unsigned int opcode;
+    unsigned short int op_num;
+    struct instruction *next, *previous;
 } __attribute__((__packed__));
 
 struct tab_entry {
-  char mnumonic[6];
-  char operands[10];
-  char hex_code[10];
-  int opcode;
-  int size;
-  /* NOP R1 COMBINE etc */
-  int type;
-  /* not sure what these do */
-  unsigned int UNKNOWN_VALUE;
-  int UNKNOWN_VALUE2;
-  int UNKNOWN_VALUE3;
+    char mnumonic[6];
+    char operands[10];
+    char hex_code[10];
+    int opcode;
+    int size;
+    /* NOP R1 COMBINE etc */
+    int type;
+    /* not sure what these do */
+    unsigned int UNKNOWN_VALUE;
+    int UNKNOWN_VALUE2;
+    int UNKNOWN_VALUE3;
 } __attribute__((__packed__));
 
 struct label_entry {
-  char *name;
-  struct instruction *instruction;
-  struct label_entry *next;
+    char *name;
+    struct instruction *instruction;
+    struct label_entry *next;
 } __attribute__((__packed__));
 
 /* zasm.c */
