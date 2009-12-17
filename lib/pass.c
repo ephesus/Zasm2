@@ -34,7 +34,7 @@ int assemble(struct tab_entry *tabroot, FILE *infile)
 /** Go through the tree of instructions and put in opcodes from the
  * table for things that dont use labels
  */
-int apply_table(struct instruction* root, struct tab_entry* table)
+int apply_table(struct instruction* root, struct tab_entry* tabroot)
 {
     struct instruction *tmp_i;
     struct tab_entry *tab_match;
@@ -45,19 +45,27 @@ int apply_table(struct instruction* root, struct tab_entry* table)
 
     tmp_i = root;
     while (tmp_i) {
-        tab_match = match_opcode(tmp_i);
+        if (!(tab_match = match_opcode(tabroot, tmp_i))) {
+            do_error_msg(ERR_PARSE);
+        }   
         tmp_i = tmp_i->next;
         num_of_instructions++;
     }
     return num_of_instructions;
 }
 
-struct tab_entry *match_opcode(struct instruction *instruction) 
+struct tab_entry *match_opcode(struct tab_entry *tabroot, struct instruction *instruction) 
 {
     struct tab_entry *tmp_tab = NULL;
 
-    printf("%s - ", instruction->mnumonic);
-    printf("%u\n", instruction->opcode);
+    printf("mo: %s - ", instruction->mnumonic);
+    printf("mo: %u\n", instruction->opcode);
+
+    tmp_tab = tabroot;
+
+    while (!strcmp(instruction->mnumonic, tmp_tab->mnumonic)) {
+        tmp_tab = tmp_tab->next;
+    }
 
     return tmp_tab;
 }
@@ -81,6 +89,7 @@ struct instruction *new_instruction() {
         do_error_msg(ERR_MALLOC);
     }
     cur->next = NULL;
+    cur->previous = NULL;
     cur->operands = NULL;
 
     return cur;
@@ -90,7 +99,7 @@ struct instruction *new_instruction() {
  * data structure with all the info about instruction sizes
  * and opcodes for all instructions without labels
  */
-struct instruction *pass_first(FILE *infile, struct tab_entry *table)
+struct instruction *pass_first(FILE *infile, struct tab_entry *tabroot)
 {
     struct instruction *root = NULL;
     label_root = NULL; 
@@ -99,7 +108,7 @@ struct instruction *pass_first(FILE *infile, struct tab_entry *table)
      * descends recursively into included source files
      */
     root = parse_source(infile, root);
-    apply_table(root, table);
+    apply_table(root, tabroot);
 
     return root;
 }
@@ -132,9 +141,8 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
         strip_comment(buffer);
         linenumber++;
 
-        if (cur == NULL) {
+        if (cur == NULL) 
             cur = new_instruction();
-        }
 
         if (isblank(buffer[0]) || (buffer[0] == '\n')) {
             /** if the first char is blank, treat as an instruction
