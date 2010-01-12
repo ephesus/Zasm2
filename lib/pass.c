@@ -46,8 +46,18 @@ int apply_table(struct instruction* root, struct tab_entry* tabroot)
     tmp_i = root;
     while (tmp_i) {
         if (!(tab_match = match_opcode(tabroot, tmp_i))) {
-            do_error_msg(ERR_PARSE);
+            //wasn't in TASM80.TAB, preprocessor directive?
+
+            if (strcmp(tmp_i->mnumonic, ".DB") == 0) {
+            } else {
+                printf("bad symbol: %s\n", tmp_i->mnumonic);
+                do_error_msg(ERR_PARSE);
+            }
         }   
+
+        //opcode has been matched
+        printf("mn: %s\n", tmp_i->mnumonic);
+
         tmp_i = tmp_i->next;
         num_of_instructions++;
     }
@@ -58,16 +68,16 @@ struct tab_entry *match_opcode(struct tab_entry *tabroot, struct instruction *in
 {
     struct tab_entry *tmp_tab = NULL;
 
-    printf("mo: %s - ", instruction->mnumonic);
-    printf("mo: %u\n", instruction->opcode);
-
     tmp_tab = tabroot;
 
-    while (!strcmp(instruction->mnumonic, tmp_tab->mnumonic)) {
+    while (tmp_tab) {
+        if (strcmp(instruction->mnumonic, tmp_tab->mnumonic) == 0) {
+            return tmp_tab;
+        }    
         tmp_tab = tmp_tab->next;
     }
 
-    return tmp_tab;
+    return NULL;
 }
 
 struct label_entry *new_label() {
