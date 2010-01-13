@@ -1,5 +1,6 @@
 ;test.asm
 
+ .org 0
 
 starting:
   ld a, 3
