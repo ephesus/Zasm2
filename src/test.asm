@@ -1,9 +1,9 @@
 ;test.asm
 
- .org 0
+.org 0
 
 starting:
-  ld a, 3
+  ld a, 3 +x-4*2
   xor a ; xx
   ld hl, 4
 label1:

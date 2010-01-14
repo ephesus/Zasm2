@@ -111,6 +111,21 @@ struct instruction *new_instruction() {
     return cur;
 }
 
+char *remove_whitespace(char * buf) {
+    int i, t;
+    char tmp[INSTRUCTION_BUFFER_SIZE];
+
+    i = t = 0;
+    while (buf[i]) {
+        if (!isblank(buf[i])) {
+            tmp[t++] = buf[i];
+        }
+        i++;
+    }
+    tmp[t] = '\0';
+    strcpy(buf, tmp);
+}
+
 /** go through the source file(s) and create a
  * data structure with all the info about instruction sizes
  * and opcodes for all instructions without labels
@@ -160,9 +175,9 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
         if (cur == NULL) 
             cur = new_instruction();
 
-        if (isblank(buffer[0]) || (buffer[0] == '\n')) {
+        if (isblank(buffer[0]) || (buffer[0] == '\n') || (buffer[0] == '.')) {
             /** if the first char is blank, treat as an instruction
-             * or a blank line.
+             * or a blank line. (or if it's a '.')
              */
 
             /** split up line, get instruction and operands */
@@ -187,12 +202,13 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
 
                 /* check for operands */
                 cur_op_num = 0;
-                while ((buf = (char *) strtok(NULL, whitespace))) {
+                while ((buf = (char *) strtok(NULL, comma))) {
                     if (!cur->operands) 
                         cur->operands = (char **) malloc(sizeof( char *));
                     else 
                         cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
 
+                    remove_whitespace(buf);
                     cur->operands[cur_op_num] = (char *) malloc(strlen(buf) );
                     strcpy(cur->operands[cur_op_num], buf);
 
