@@ -1,0 +1,12 @@
+Makefile
+config.h
+config.log
+config.status
+doc/Makefile
+lib/Makefile
+src/Makefile
+*.swp
+*.o
+src/woo
+src/*.swp
+lib/*.swp

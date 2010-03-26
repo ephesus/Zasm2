@@ -62,8 +62,10 @@ int apply_table(struct instruction* root, struct tab_entry* tabroot)
             }
         }   
 
+#ifdef DEBUG
         //opcode has been matched
         printf("mn: %s\n", tmp_i->mnumonic);
+#endif
 
         tmp_i = tmp_i->next;
         num_of_instructions++;
@@ -303,7 +305,7 @@ int pass_second(struct instruction *root)
         instd = cur->instruction;
 
 #ifdef DEBUG
-        //print all labels and 
+        //print all labels and operands
         printf("label: %s  :\n", cur->name);
         printf("   inst: %s  :\n", instd->mnumonic);
         for(i = 0; i < instd->op_num; i++) {
