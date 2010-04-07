@@ -10,3 +10,4 @@ src/Makefile
 src/woo
 src/*.swp
 lib/*.swp
+src/zasm
