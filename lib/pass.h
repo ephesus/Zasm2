@@ -19,8 +19,15 @@ struct instruction *get_operands(struct instruction *);
 struct instruction *new_instruction();
 struct label_entry *new_label();
 struct instruction *pass_first(FILE *, struct tab_entry*);
-struct instruction *parse_source(FILE *, struct instruction*);
-struct tab_entry *match_opcode(struct tab_entry *, struct instruction *);
+struct instruction *parse_source(FILE *, struct instruction*, struct tab_entry*);
+struct tab_entry *match_mnumonic(struct tab_entry *, struct instruction *);
 
 void attach_label(char *, struct instruction *);
+void calculate_opcode(struct tab_entry*, struct instruction *);
 
+enum z_directive {
+    Z_DB,
+    Z_DW,
+    Z_ORG,
+    Z_END
+};
