@@ -40,21 +40,25 @@ void strip_comment(char *ptr)
     }
 }
 
-void do_error() {
+void do_error() 
+{
     printf("Error: line %f - Closing\n", linenumber);
     exit(EIO);
 }
 
-void do_error_msg(char *message) {
+void do_error_msg(char *message) 
+{
     printf("Error: line %.0f - %s\n", linenumber, message);
     exit(EIO);
 }
 
-void free_lists() {
+void free_lists() 
+{
 
 }
 
-struct tab_entry* new_tab_entry(char *buf) {
+struct tab_entry* new_tab_entry(char *buf) 
+{
     struct tab_entry *new_tab_entry;
 
     new_tab_entry =    (struct tab_entry *) malloc(sizeof(struct tab_entry));
@@ -67,7 +71,8 @@ struct tab_entry* new_tab_entry(char *buf) {
 
 /*! parse the table file and create a list 
   with all of the possible instructions */
-struct tab_entry *read_table(FILE *tabfile) {
+struct tab_entry *read_table(FILE *tabfile) 
+{
     struct tab_entry *root = NULL;
     struct tab_entry *temp = NULL;
     struct tab_entry *old_tmp = NULL;
