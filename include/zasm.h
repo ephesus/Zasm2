@@ -46,6 +46,36 @@ struct label_entry {
     struct label_entry *next;
 } __attribute__((__packed__));
 
+/* symbols */
+enum Z_SYMS {
+  Z_A,
+  Z_B,
+  Z_C,
+  Z_D,
+  Z_E,
+  Z_H,
+  Z_L,
+  Z_M,
+  Z_R,
+  Z_BC,
+  Z_DE,
+  Z_HL,
+  Z_IX,
+  Z_IY,
+  Z_IXH,
+  Z_IYH,
+  Z_IXS,
+  Z_IYS,
+  Z_PC,
+  Z_PE,
+  Z_PO,
+  Z_SP,
+  Z_CARRY,
+  Z_Z,
+  Z_NC,
+  Z_NZ,
+};
+
 /* zasm.c */
 extern int verbose;
 extern int tiprog;
