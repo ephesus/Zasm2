@@ -8,6 +8,7 @@
  *  査読お願いします!
  */
 
+char *calculate_query_string(struct instruction *);
 char *remove_whitespace(char *);
 
 int apply_table(struct instruction *, struct tab_entry*);

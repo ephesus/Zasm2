@@ -30,10 +30,22 @@ int assemble(struct tab_entry *tabroot, FILE *infile)
     return result;
 }
 
+
+char *calculate_query_string(struct instruction *tmp_i)
+{
+    char *query;
+
+    query = (char *) malloc(INSTRUCTION_BUFFER_SIZE); 
+    
+
+    return query;
+}
+
 /* wasn't a label, so assume it's an instruction */
 void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i) 
 {
     struct tab_entry *tab_match;
+    char *query_string;
 
     if (!(tab_match = match_mnumonic(tabroot, tmp_i))) {
         /* wasn't in TASM80.TAB, preprocessor directive?
@@ -61,6 +73,9 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
         } else {
             printf("opc:  %s\tno: %d\n", tab_match->mnumonic, tmp_i->op_num);
 
+            query_string = calculate_query_string(tmp_i);
+
+            free(query_string);
         }
 
     }
