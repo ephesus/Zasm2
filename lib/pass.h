@@ -8,11 +8,13 @@
  *  査読お願いします!
  */
 
+char *append_string(char *, const char *);
 char *calculate_query_string(struct instruction *);
 char *remove_whitespace(char *);
 
 int apply_table(struct instruction *, struct tab_entry*);
 int assemble(struct tab_entry *, FILE *);
+int check_for_symbol(char *);
 int pass_second(struct instruction *);
 int validate_label(char *);
 
@@ -32,3 +34,36 @@ enum Z_DIRECTIVE {
     Z_ORG,
     Z_END
 };
+
+#define NUM_SYMBOLS_TO_CHECK 25
+const char *REGISTERS[] = {
+    //registers
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "BC",
+    "DE",
+    "HL",
+    "AF",
+    "IX",
+    "IY",
+    "IXH",
+    "IYH",
+    "PC",
+    "SP",
+     //flags
+    "NC",
+    "NZ",
+    "Z",
+    "R",
+    "PE",
+    "PO",
+};
+
+

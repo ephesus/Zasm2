@@ -30,13 +30,56 @@ int assemble(struct tab_entry *tabroot, FILE *infile)
     return result;
 }
 
+int check_for_symbol(char *operand)
+{
+    int i;
+    
+    for (i=0; i<NUM_SYMBOLS_TO_CHECK; i++) {
+        if (strcmp(REGISTERS[i], operand) == 0) {
+            return 1;
+        }
+    }
 
+    return 0;
+}
+
+char *append_string(char *target, const char *addition)
+{
+    char *tmp;
+
+    tmp = target;
+
+    while (*tmp) {
+        tmp++;
+    }
+
+    strcpy(tmp, addition);
+
+    return target;
+}
+
+/* Figure out the generic string representing the individual
+ * instruction in the TABLE file. The instruction is already
+ * matched so it's only the operands 
+ */ 
 char *calculate_query_string(struct instruction *tmp_i)
 {
     char *query;
+    char tmp_str[10];
+    int i;
 
     query = (char *) malloc(INSTRUCTION_BUFFER_SIZE); 
-    
+    query[0] = '\0';
+
+    for (i = 0; i < tmp_i->op_num; i++) {
+            if (check_for_symbol(tmp_i->operands[i])) {
+                query = append_string(query, tmp_i->operands[i]);
+            } else {
+                //reduce this operand to an int or throw error.
+                //labels get reduced to addresses, expressions reduced to
+                //their values etc.
+            }
+    }
 
     return query;
 }
@@ -65,7 +108,7 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
             do_error_msg(ERR_PARSE);
         }
     } else {
-        /* MNUMONIC matched */
+        /* MNUMONIC already matched */
         if (!tmp_i->op_num) {
             //tab_match is correct tab_entry
             printf("opc: %s\tos: %s\thc: %s\tsize: %d\n", tab_match->mnumonic,
@@ -74,6 +117,7 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
             printf("opc:  %s\tno: %d\n", tab_match->mnumonic, tmp_i->op_num);
 
             query_string = calculate_query_string(tmp_i);
+
 
             free(query_string);
         }
