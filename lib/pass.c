@@ -30,7 +30,7 @@ int assemble(struct tab_entry *tabroot, FILE *infile)
     return result;
 }
 
-int check_for_symbol(char *operand)
+int check_for_symbol(const char *operand)
 {
     int i;
     
@@ -62,7 +62,7 @@ char *append_string(char *target, const char *addition)
  * instruction in the TABLE file. The instruction is already
  * matched so it's only the operands 
  */ 
-char *calculate_query_string(struct instruction *tmp_i)
+char *calculate_query_string(const struct instruction *tmp_i)
 {
     char *query;
     char tmp_str[10];
