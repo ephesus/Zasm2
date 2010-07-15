@@ -5,7 +5,9 @@
 starting:
   ld a, b
   xor a ; xx
-  ld hl, de
+  rl l
+  rla
+  rl a
 label1:
 label2:
   ld (hl),  a
