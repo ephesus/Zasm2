@@ -3,11 +3,12 @@
 .org 0
 
 starting:
-  ld a, 3 + 2 -     4*2
+  ld a, b
   xor a ; xx
-  ld hl, 4
+  ld hl, de
 label1:
 label2:
+  ld (hl),  a
   add a,b
   add a, 15 ;(3*5) no preprocessing yet
   ret;fuck this

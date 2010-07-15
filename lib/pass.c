@@ -86,10 +86,33 @@ char *calculate_query_string(const struct instruction *tmp_i)
     return query;
 }
 
+struct tab_entry *match_operands_to_mnumonic(struct tab_entry *tab_match, const char *query_string)
+{
+    char current_mnumonic[MNUMONIC_TXT_LENGTH];
+    struct tab_entry *tab_tmp;
+
+    strncpy(current_mnumonic, tab_match->mnumonic, MNUMONIC_TXT_LENGTH);
+    tab_tmp = tab_match;
+
+    //loop until we get to the next mnumonic or the end
+    while ((strcmp(current_mnumonic, tab_tmp->mnumonic) == 0) && (tab_tmp->next)) {
+        if (strcmp(tab_tmp->operands, query_string) == 0) {
+            //return a matched instruction
+            return tab_tmp;
+        }
+        tab_tmp = tab_tmp->next;
+    }
+
+    return NULL;
+}
+
 /* wasn't a label, so assume it's an instruction */
+
+/* THIS FUNCTION IS A DISASTER AREA, NEEDS REFACTORING */
 void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i) 
 {
     struct tab_entry *tab_match;
+    struct tab_entry *tab_temp;
     char *query_string;
 
     if (!(tab_match = match_mnumonic(tabroot, tmp_i))) {
@@ -116,11 +139,19 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
             printf("opc: %s\tos: %s\thc: %s\tsize: %d\n", tab_match->mnumonic,
                     tab_match->operands, tab_match->hex_code, tab_match->size);
         } else {
-            printf("opc:  %s\tno: %d\n", tab_match->mnumonic, tmp_i->op_num);
 
             query_string = calculate_query_string(tmp_i);
             //step through tab_entry's of same mnumonic comparing query_string to tab_entry->operands
 
+            if (tab_temp = match_operands_to_mnumonic(tab_match, query_string)) {
+                tab_match = tab_temp;
+
+                printf("*opc: %s \tos: %s\thc: %s\tsize: %d\n", tab_match->mnumonic,
+                        tab_match->operands, tab_match->hex_code, tab_match->size);
+            } else {
+                //check if one operand is value or label
+                printf("***query_string: %s\n", query_string);
+            }
 
             //printf("QUERY: %s\n", query_string);  //debug
             free(query_string);
@@ -287,7 +318,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
              * or a blank line. (or if it's a '.')
              */
 
-            /** split up line, get instruction and operands */
+            /** split line, get instruction and operands */
             if ((buf = (char *) strtok(buffer, whitespace))) {
                 instructions++;
 
