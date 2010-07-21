@@ -55,6 +55,8 @@ const char *REGISTERS[] = {
     "AF",
     "IX",
     "IY",
+    "IXL",
+    "IYL",
     "IXH",
     "IYH",
     "PC",

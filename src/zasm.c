@@ -29,27 +29,27 @@ struct label_entry *label_current;
 
 void strip_comment(char *ptr)
 {
-    /*! replace any ; or \n with a terminating null */
-    while (*ptr != '\0') {
-        if ((*ptr == ';')||(*ptr == '\n')||(*ptr == ':')) {
-            *ptr = '\0';
-            break;
-        }
-
-        ptr++;
+  /*! replace any ; or \n with a terminating null */
+  while (*ptr != '\0') {
+    if ((*ptr == ';')||(*ptr == '\n')||(*ptr == ':')) {
+      *ptr = '\0';
+      break;
     }
+
+    ptr++;
+  }
 }
 
 void do_error() 
 {
-    printf("Error: line %f - Closing\n", linenumber);
-    exit(EIO);
+  printf("Error: line %f - Closing\n", linenumber);
+  exit(EIO);
 }
 
 void do_error_msg(char *message) 
 {
-    printf("Error: line %.0f - %s\n", linenumber, message);
-    exit(EIO);
+  printf("Error: line %.0f - %s\n", linenumber, message);
+  exit(EIO);
 }
 
 void free_lists() 
@@ -59,146 +59,157 @@ void free_lists()
 
 struct tab_entry* new_tab_entry(char *buf) 
 {
-    struct tab_entry *new_tab_entry;
+  struct tab_entry *new_tab_entry;
 
-    new_tab_entry =    (struct tab_entry *) malloc(sizeof(struct tab_entry));
-    memset(new_tab_entry, 0, sizeof(struct tab_entry));
-    strcpy(new_tab_entry->mnumonic, buf);
-    new_tab_entry->opcode = -1;
-    new_tab_entry->size = -1;
-    return new_tab_entry;
+  new_tab_entry =    (struct tab_entry *) malloc(sizeof(struct tab_entry));
+  memset(new_tab_entry, 0, sizeof(struct tab_entry));
+  strcpy(new_tab_entry->mnumonic, buf);
+  new_tab_entry->opcode = -1;
+  new_tab_entry->size = -1;
+  return new_tab_entry;
 }
 
 /*! parse the table file and create a list 
   with all of the possible instructions */
 struct tab_entry *read_table(FILE *tabfile) 
 {
-    struct tab_entry *root = NULL;
-    struct tab_entry *temp = NULL;
-    struct tab_entry *old_tmp = NULL;
-    char buffer[TABFILE_BUFFER_SIZE];
-    char hexbuf[TABFILE_BUFFER_SIZE];
-    char *buf, *endptr;
+  struct tab_entry *root = NULL;
+  struct tab_entry *temp = NULL;
+  struct tab_entry *old_tmp = NULL;
+  char buffer[TABFILE_BUFFER_SIZE];
+  char hexbuf[TABFILE_BUFFER_SIZE];
+  char *buf, *endptr;
 
-    while (fgets(buffer, TABFILE_BUFFER_SIZE, tabfile)) {
-        if (buf = (char *) strtok(buffer, tab_whitespace)) {
-            temp = new_tab_entry(buf);
-            strcpy(hexbuf,"0x");
+  while (fgets(buffer, TABFILE_BUFFER_SIZE, tabfile)) {
+    if (buf = (char *) strtok(buffer, tab_whitespace)) {
+      temp = new_tab_entry(buf);
+      strcpy(hexbuf,"0x");
 
-            while ((buf = (char *) strtok(NULL, tab_whitespace))) {
-                if (*temp->operands == 0) {
-                    strcpy(temp->operands, buf);
-                } else if (*temp->hex_code == 0) {
-                    //fill in hex code and opcode
-                    strcpy(temp->hex_code, buf);
-                    strcpy(hexbuf+2, buf);
-                    temp->opcode = (unsigned int)strtol(hexbuf, (char **)NULL, 16);
-                } else if (temp->size == -1){
-                    temp->size = atoi(buf);
-                }
-            }
+      while ((buf = (char *) strtok(NULL, tab_whitespace))) {
+        if (*temp->operands == 0) {
+          strcpy(temp->operands, buf);
+        } else if (*temp->hex_code == 0) {
+          //fill in hex code and opcode
+          strcpy(temp->hex_code, buf);
+          strcpy(hexbuf+2, buf);
+          temp->opcode = (unsigned int)strtol(hexbuf, (char **)NULL, 16);
+        } else if (temp->size == -1){
+          temp->size = atoi(buf);
+        }
+      }
 
 #ifdef DEBUG2
-            printf("mnumonic: %s\n operand: %s\n hexcode: %s\n opcode: %d\n size: %d\n",
-                    temp->mnumonic, temp->operands, temp->hex_code, temp->opcode, temp->size);
+      printf("mnumonic: %s\n operand: %s\n hexcode: %s\n opcode: %d\n size: %d\n",
+          temp->mnumonic, temp->operands, temp->hex_code, temp->opcode, temp->size);
 #endif
-            /* start linked list, or add to it  */
-            if (root == NULL) {
-                root = temp;
-                old_tmp = temp;
-            } else {
-                old_tmp->next = temp;
-                old_tmp = temp;
-            }
-        }
+      /* start linked list, or add to it  */
+      if (root == NULL) {
+        root = temp;
+        old_tmp = temp;
+      } else {
+        old_tmp->next = temp;
+        old_tmp = temp;
+      }
     }
+  }
 
-    return root;
+  return root;
 }
 
 
 
 int main(int ac, char **av)
 {
-    int c;
-    FILE *infile=NULL, *outfile=NULL, *tabfile=NULL;
-    struct instruction *root=NULL;
-    struct tab_entry *tab_root=NULL;
+  int c;
+  FILE *infile=NULL, *outfile=NULL, *tabfile=NULL;
+  struct instruction *root=NULL;
+  struct tab_entry *tab_root=NULL;
 
-    while (1) {
-        int option_index=0;
-        static struct option long_options[] = {
-            {"version", 0, 0, 'V'},
-            {"tabfile", 1, 0, 'T'},
-            {"verbose", 0, 0, 'v'},
-            {"help", 0, 0, 'h'},
-            {"tiprog", 0, 0, 't'},
-            {"tistrng", 0, 0, 's'},
-            {0, 0, 0, 0}
-        };
+  char expr[] = "(2*1+3)";
+  char expr2[] = "(2*r+3)";
 
-        c = getopt_long (ac, av, "vVdtsT:hp",
-                long_options, &option_index);
-        if (c == -1)
-            break;
+  printf("e: %d\n", shunt(expr));
 
-        switch (c) {
-            case 'h':
-            case 'V':
-                show_help(0);
-                break;
-            case 'v':
-                verbose = 420;
-                break;
-            case 's':
-                tistring = 420;
-                break;
-            case 'T':
-                /* set up table file handle */
-                if (!(tabfile = fopen(optarg, "r"))) {
-                    printf("Error opening tabfile: %s\n", optarg);
-                    exit(1);
-                }
-                break;
-            default:
-                /* invalid switch, so failing */
-                exit(1);
-        }
-    }
+  if (c = shunt(expr2)) {
+    printf("e: %d\n", c);
+  } else {
+    printf("heyo\n");
+  }
 
-    /* check if tabflie is open, if not use default */
-    if (!tabfile){
-        if (tabfile=fopen("./TASM80.TAB","r")){
-            if (verbose)
-                puts("using default tab file TASM80.TAB");
-        } else {
-            puts("Can't open TASM80.TAB file");
-            exit(1);
-        }
-    }
+  while (1) {
+    int option_index=0;
+    static struct option long_options[] = {
+      {"version", 0, 0, 'V'},
+      {"tabfile", 1, 0, 'T'},
+      {"verbose", 0, 0, 'v'},
+      {"help", 0, 0, 'h'},
+      {"tiprog", 0, 0, 't'},
+      {"tistrng", 0, 0, 's'},
+      {0, 0, 0, 0}
+    };
 
-    if (!(infile = fopen(av[optind], "r"))) {
-        printf("error: with source file \"%s\"\n", av[optind]);
-        show_help(1);
+    c = getopt_long (ac, av, "vVdtsT:hp",
+        long_options, &option_index);
+    if (c == -1)
+      break;
+
+    switch (c) {
+    case 'h':
+    case 'V':
+      show_help(0);
+      break;
+    case 'v':
+      verbose = 420;
+      break;
+    case 's':
+      tistring = 420;
+      break;
+    case 'T':
+      /* set up table file handle */
+      if (!(tabfile = fopen(optarg, "r"))) {
+        printf("Error opening tabfile: %s\n", optarg);
         exit(1);
+      }
+      break;
+    default:
+      /* invalid switch, so failing */
+      exit(1);
     }
+  }
 
-    if (!(outfile = fopen(av[optind+1], "w"))) {
-        printf("error: with output file %s\n", av[optind+1]);
-        show_help(1);
-        exit(1);
+  /* check if tabflie is open, if not use default */
+  if (!tabfile){
+    if (tabfile=fopen("./TASM80.TAB","r")){
+      if (verbose)
+        puts("using default tab file TASM80.TAB");
+    } else {
+      puts("Can't open TASM80.TAB file");
+      exit(1);
     }
+  }
 
-    if (verbose) {
-        printf("infile:  %s\n", av[optind]);
-        printf("outfile: %s\n", av[optind+1]);
-    }
+  if (!(infile = fopen(av[optind], "r"))) {
+    printf("error: with source file \"%s\"\n", av[optind]);
+    show_help(1);
+    exit(1);
+  }
 
-    /* read table file */
-    tab_root = read_table(tabfile);
+  if (!(outfile = fopen(av[optind+1], "w"))) {
+    printf("error: with output file %s\n", av[optind+1]);
+    show_help(1);
+    exit(1);
+  }
 
-    assemble(tab_root, infile);
+  if (verbose) {
+    printf("infile:  %s\n", av[optind]);
+    printf("outfile: %s\n", av[optind+1]);
+  }
 
-    return 0;
+  /* read table file */
+  tab_root = read_table(tabfile);
+
+  assemble(tab_root, infile);
+
+  return 0;
 }
 
