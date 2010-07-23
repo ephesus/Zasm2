@@ -29,6 +29,7 @@ struct tab_entry *match_operands_to_mnumonic(struct tab_entry *, const char *);
 void append_string(char *, const char *);
 void attach_label(char *, struct instruction *);
 void calculate_opcode(struct tab_entry*, struct instruction *);
+void found_correct_tab_entry(struct instruction *, struct tab_entry *);
 
 enum Z_DIRECTIVE {
     Z_DB,
