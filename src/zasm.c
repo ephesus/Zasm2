@@ -125,17 +125,6 @@ int main(int ac, char **av)
   struct instruction *root=NULL;
   struct tab_entry *tab_root=NULL;
 
-  char expr[] = "(2*1+3)";
-  char expr2[] = "(2*r+3)";
-
-  printf("e: %d\n", shunt(expr));
-
-  if (c = shunt(expr2)) {
-    printf("e: %d\n", c);
-  } else {
-    printf("heyo\n");
-  }
-
   while (1) {
     int option_index=0;
     static struct option long_options[] = {
