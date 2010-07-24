@@ -79,7 +79,13 @@ char *calculate_query_string(const struct instruction *tmp_i)
             //labels get reduced to addresses, expressions reduced to
             //their values etc.
 
-            append_string(query, tmp_i->operands[i]);
+            if ((isdigit(tmp_i->operands[i][0])) || (tmp_i->operands[i][0] == '$')) {
+                //if it's a value replace it with * 
+                append_string(query, "*");
+            } else {
+                //not a value, not a register
+                append_string(query, tmp_i->operands[i]);
+            }
         }
     }
 
@@ -145,12 +151,7 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
 
 struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *tab_match) 
 {
-    struct tab_entry *tab_temp;
-
-    if (tab_temp = match_operands_to_mnumonic(tab_match, query_string)) {
-        tab_match = tab_temp;
-
-    } else {
+    if (!(tab_match = match_operands_to_mnumonic(tab_match, query_string))) {
         //check if one operand is value or label
         printf("***query_string: %s\n", query_string);
     }
@@ -407,6 +408,7 @@ int pass_second(struct instruction *root)
     //loop through instructions
     while (instd) {
     printf("   inst: %s  :\n", instd->mnumonic);
+    printf("    matched_tab: %d  :\n", (int) instd->matched_tab);
     for(i = 0; i < instd->op_num; i++) 
     printf("\t:opnd: %s\n", instd->operands[i]);
     instd = instd->next;
