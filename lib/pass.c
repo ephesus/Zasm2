@@ -52,6 +52,7 @@ void append_string(char *target, const char *addition)
         tmp++;
     }
 
+    //this is a potential buffer overflow
     strcpy(tmp, addition);
 }
 
@@ -59,7 +60,7 @@ void append_string(char *target, const char *addition)
  * instruction in the TABLE file. The instruction is already
  * matched so it's only the operands 
  */ 
-char *calculate_query_string(const struct instruction *tmp_i)
+char *calculate_query_string(struct instruction *tmp_i)
 {
     char *query;
     char tmp_str[10];
@@ -75,16 +76,16 @@ char *calculate_query_string(const struct instruction *tmp_i)
         if (check_for_symbol(tmp_i->operands[i])) {
             append_string(query, tmp_i->operands[i]);
         } else {
-            //reduce this operand to an int or throw error.
-            //labels get reduced to addresses, expressions reduced to
-            //their values etc.
-
-            if ((isdigit(tmp_i->operands[i][0])) || (tmp_i->operands[i][0] == '$')) {
-                //if it's a value replace it with * 
+            //if first char is alphanumeric, assume it's a label
+            if (isalpha(tmp_i->operands[i][0])) {
+                tmp_i->haslabel =1;
+                append_string(query, "*");
+            } else if ((isdigit(tmp_i->operands[i][0])) || (tmp_i->operands[i][0] == '$')) {
+                //if first char is digit or '$' assume it's a value
                 append_string(query, "*");
             } else {
-                //not a value, not a register
-                append_string(query, tmp_i->operands[i]);
+                //anything else, just copy. things like (HL) for example
+                append_string(query,tmp_i->operands[i]);
             }
         }
     }
@@ -154,6 +155,7 @@ struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *t
     if (!(tab_match = match_operands_to_mnumonic(tab_match, query_string))) {
         //check if one operand is value or label
         printf("***query_string: %s\n", query_string);
+        printf("something fell through - not good\n");
     }
 
     return tab_match;
