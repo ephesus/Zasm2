@@ -14,6 +14,7 @@
 #define tab_whitespace " \t\r\n"
 #define DEBUG 
 #define ERR_PARSE "Couldn't parse"
+#define ERR_BADLABEL "Invalid Label"
 #define ERR_MALLOC "Out of Memory"
 
 /* put a 4-byte integer into a byte array in LSB order or MSB order */

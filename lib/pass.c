@@ -317,9 +317,9 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
         if (cur == NULL) 
             cur = new_instruction();
 
-        if (isblank(buffer[0]) || (buffer[0] == '\n') || (buffer[0] == '.')) {
+        if (isblank(buffer[0]) || (buffer[0] == '\n') || (buffer[0] == '#') || (buffer[0] == '.')) {
             /** if the first char is blank, treat as an instruction
-             * or a blank line. (or if it's a '.')
+             * or a blank line.
              */
 
             /** split line, get instruction and operands */
@@ -355,7 +355,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
                 if (validate_label(buffer))
                     attach_label(buffer, cur);
                 else 
-                    do_error_msg(ERR_PARSE);
+                    do_error_msg(ERR_BADLABEL);
 
             }
         }
@@ -389,8 +389,9 @@ int validate_label(char *ptr)
 {
     int valid = 1;
     while (*ptr != '\0') {
-        if (!isalnum(*ptr++))
+        if (!(isalnum(*ptr) || *ptr == '_') || *ptr == '.') || *ptr == '-'))
             valid = 0;
+        ptr++;
     }
     return valid;
 }
@@ -405,12 +406,11 @@ int pass_second(struct instruction *root)
     int i = 0;
 
 #ifdef DEBUG
-    /*
        instd = root;
     //loop through instructions
     while (instd) {
     printf("   inst: %s  :\n", instd->mnumonic);
-    printf("    matched_tab: %d  :\n", (int) instd->matched_tab);
+    printf("    matched_tab: %p  :\n",  instd->matched_tab);
     for(i = 0; i < instd->op_num; i++) 
     printf("\t:opnd: %s\n", instd->operands[i]);
     instd = instd->next;
@@ -429,7 +429,6 @@ int pass_second(struct instruction *root)
 
     cur = cur->next;
     }
-    */
 #endif
 
 
