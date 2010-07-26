@@ -189,9 +189,7 @@ struct label_entry *new_label()
     if (!(tmp = (struct label_entry *) malloc(sizeof(struct label_entry)))) {
         do_error_msg(ERR_MALLOC);
     }
-    tmp->instruction = NULL;
-    tmp->next = NULL;
-    tmp->name = NULL;
+    memset(tmp, 0, sizeof(struct label_entry));
     return tmp;
 }
 
@@ -336,7 +334,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
                 /* convert to uppercase */
                 capitalize(buf);
 
-                strcpy(cur->mnumonic, buf);
+                strncpy(cur->mnumonic, buf, MNUMONIC_TXT_LENGTH);
 
                 /* attach any operands we find */
                 get_operands(cur);
@@ -384,12 +382,13 @@ void attach_label(char *ptr, struct instruction *inst)
 }
 
 /* make sure that the label is a valid label with ascii chars
- * if it's not valid, return a false */
+ * if it's not valid, return a false 
+ * */
 int validate_label(char *ptr) 
 {
     int valid = 1;
     while (*ptr != '\0') {
-        if (!(isalnum(*ptr) || *ptr == '_') || *ptr == '.') || *ptr == '-'))
+        if (!(isalnum(*ptr) || (*ptr == '-') || (*ptr == '_') || (*ptr == '.') || (*ptr == '@')))
             valid = 0;
         ptr++;
     }
