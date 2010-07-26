@@ -139,6 +139,9 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
         } else if ((strcmp(tmp_i->mnumonic, ".DB") == 0) || 
                 (strcmp(tmp_i->mnumonic, ".BYTE") == 0)) {
 
+        } else if ((strcmp(tmp_i->mnumonic, ".INCLUDE") == 0) || 
+                (strcmp(tmp_i->mnumonic, ".REQUIRE") == 0)) {
+
         } else if (strcmp(tmp_i->mnumonic, ".ORG") == 0) {
             //set assumed PC register value
 
@@ -319,6 +322,9 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
             /** if the first char is blank, treat as an instruction
              * or a blank line.
              */
+
+            if (buffer[0] == '#') //make preprocessor directives .<directive>
+                buffer[0] = '.';
 
             /** split line, get instruction and operands */
             if ((buf = (char *) strtok(buffer, whitespace))) {
