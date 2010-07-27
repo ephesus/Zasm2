@@ -1,6 +1,9 @@
 ;test.asm
 
-.org 0
+ _textShadow = $9f00
+ origin = _textShadow
+
+.org origin
 
 starting:
   ld a, b
