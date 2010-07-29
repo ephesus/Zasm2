@@ -67,16 +67,14 @@ extern struct label_entry *label_root;
 extern struct label_entry *label_current;
 extern struct label_entry *label_latest_unset;
 extern struct tab_entry *read_table(FILE*);
-extern void strip_comment(char *);
 extern void do_error_msg(char *);
 extern void do_error();
-extern void free_lists();
-void post_process(int mode);
+static void free_lists();
 struct tab_entry *new_tab_entry(char *);
 
 /* pass.c */
-extern int pass(struct instruction *, struct tab_entry *, FILE * infile);
 extern unsigned int current_address;
+extern void strip_comment(char *);
 
 /* shunt.c */
 extern int shunt(char *);

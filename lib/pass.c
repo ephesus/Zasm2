@@ -16,6 +16,19 @@
 #include "ctype.h"
 #include "pass.h"
 
+void strip_comment(char *ptr)
+{
+  /*! replace any ; or \n with a terminating null */
+  while (*ptr != '\0') {
+    if ((*ptr == ';')||(*ptr == '\n')||(*ptr == ':')) {
+      *ptr = '\0';
+      break;
+    }
+
+    ptr++;
+  }
+}
+
 /* starting new file */
 int assemble(struct tab_entry *tabroot, FILE *infile)
 {
