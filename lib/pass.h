@@ -65,7 +65,7 @@ const char *REGISTERS[] = {
     "IYH",
     "PC",
     "SP",
-     //flags
+    //flags
     "NC",
     "NZ",
     "Z",
