@@ -15,7 +15,7 @@
 #define DEBUG 
 #define ERR_PARSE "Couldn't parse"
 #define ERR_BADLABEL "Invalid Label"
-#define ERR_MALLOC "Out of Memory"
+#define ERR_MALLOC "Out of heap memory - seriously?"
 
 /* put a 4-byte integer into a byte array in LSB order or MSB order */
 /* from Mark Adler's pigz source */
@@ -32,7 +32,7 @@ struct instruction {
     unsigned int address;
     unsigned short int op_num;
     unsigned short int assembled;
-    unsigned short int haslabel;
+    unsigned short int not_reduced;
     struct tab_entry *matched_tab;
     struct instruction *next, *previous;
 } __attribute__((__packed__));
@@ -52,6 +52,13 @@ struct tab_entry {
     struct tab_entry *next;
 } __attribute__((__packed__));
 
+struct symbol_entry {
+    char *name;
+    struct instruction *instruction;
+    unsigned int address;
+    struct symbol_entry *next;
+} __attribute__((__packed__));
+
 struct label_entry {
     char *name;
     struct instruction *instruction;
@@ -66,6 +73,7 @@ extern double linenumber;
 extern struct label_entry *label_root;
 extern struct label_entry *label_current;
 extern struct label_entry *label_latest_unset;
+extern struct symbol_entry *symbol_root;
 extern struct tab_entry *read_table(FILE*);
 extern void do_error_msg(char *);
 extern void do_error();

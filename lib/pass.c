@@ -104,9 +104,9 @@ char *calculate_query_string(struct instruction *tmp_i)
         if (check_for_symbol(tmp_i->operands[i])) {
             append_string(query, tmp_i->operands[i]);
         } else {
-            //if first char is alphanumeric, assume it's a label
+            //if first char is alphanumeric, it's not a register
             if (isalpha(tmp_i->operands[i][0])) {
-                tmp_i->haslabel =1;
+                tmp_i->not_reduced =1;
                 append_string(query, "*");
             } else if ((isdigit(tmp_i->operands[i][0])) || (tmp_i->operands[i][0] == '$')) {
                 //if first char is digit or '$' assume it's a value
@@ -185,10 +185,25 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
 
 int add_symbol(struct instruction *tmp_i)
 {
+    struct symbol_entry *cur;
+    printf("symbol found: %s %s\n", tmp_i->mnumonic, tmp_i->operands[0]);
+
     if ((tmp_i->operands[0][0] == '=')) {
-        printf("symbol found\n");
+        if (validate_label(tmp_i->mnumonic)) {
+
+            cur = new_symbol(); 
+            cur->name = tmp_i->mnumonic;
+            cur->instruction = tmp_i; //pointing to heap address of tmp_i (probably bad..)
+
+            //if first symbol, set it to root
+            if (!symbol_root) { 
+                symbol_root = cur;
+            }
+            return 0;
+        }
     }
-    return 0;
+
+    return 1;
 }
 
 struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *tab_match) 
@@ -221,6 +236,17 @@ struct tab_entry *match_mnumonic(struct tab_entry *tabroot, struct instruction *
 void found_correct_tab_entry(struct instruction *tmp_i, struct tab_entry *match)
 {
     tmp_i->matched_tab = match;
+}
+
+struct symbol_entry *new_symbol()
+{
+    struct symbol_entry *tmp;
+
+    if (!(tmp = (struct symbol_entry*) malloc(sizeof(struct symbol_entry)))) {
+        do_error_msg(ERR_MALLOC);
+    }
+    memset(tmp, 0, sizeof(struct symbol_entry));
+    return tmp;
 }
 
 struct label_entry *new_label() 
@@ -360,7 +386,6 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
                 if (cur_old)
                     cur_old->next = cur;
 
-                /* convert to uppercase */
                 capitalize(buf);
 
                 strncpy(cur->mnumonic, buf, MNUMONIC_TXT_LENGTH);
@@ -369,10 +394,8 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
                 get_operands(cur);
             }
 
-            /* instruction loaded, convert to opcode */
             calculate_opcode(tabroot, cur);
 
-            /* set cur_old for next iteration */
             cur_old = cur;
             cur = new_instruction();
 
@@ -437,7 +460,7 @@ int pass_second(struct instruction *root)
     instd = root;
     //loop through instructions
     while (instd) {
-        if (instd->haslabel) {
+        if (instd->not_reduced) {
             printf("   inst: %s  :\n", instd->mnumonic);
             printf("    matched_tab: %p  :\n",  instd->matched_tab);
             for(i = 0; i < instd->op_num; i++) 

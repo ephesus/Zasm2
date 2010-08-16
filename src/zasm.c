@@ -27,6 +27,7 @@ unsigned int current_address = 0;
 struct label_entry* label_root;
 struct label_entry *label_latest_unset;
 struct label_entry *label_current;
+struct symbol_entry* symbol_root = NULL;
 
 void do_error() 
 {
