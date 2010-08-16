@@ -24,10 +24,10 @@ int tistring = 0;
 int tiprog = 0;
 double linenumber = 0;
 unsigned int current_address = 0;
-struct label_entry* label_root;
-struct label_entry *label_latest_unset;
-struct label_entry *label_current;
+struct label_entry* label_root = NULL; //data segment should be initialized to 0, but lets not assume
+struct label_entry *label_current = NULL;
 struct symbol_entry* symbol_root = NULL;
+struct symbol_entry* symbol_current = NULL;
 
 void do_error() 
 {
@@ -43,6 +43,9 @@ void do_error_msg(char *message)
 
 void free_lists() 
 {
+    /* can't free symbol_root before instruction_root because
+     * s references i
+     */
 
 }
 

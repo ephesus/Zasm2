@@ -186,18 +186,21 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
 int add_symbol(struct instruction *tmp_i)
 {
     struct symbol_entry *cur;
-    printf("symbol found: %s %s\n", tmp_i->mnumonic, tmp_i->operands[0]);
 
     if ((tmp_i->operands[0][0] == '=')) {
         if (validate_label(tmp_i->mnumonic)) {
 
             cur = new_symbol(); 
             cur->name = tmp_i->mnumonic;
-            cur->instruction = tmp_i; //pointing to heap address of tmp_i (probably bad..)
+            cur->instruction = tmp_i; 
 
             //if first symbol, set it to root
             if (!symbol_root) { 
                 symbol_root = cur;
+                symbol_current = cur;
+            } else {
+                symbol_current->next = cur;
+                symbol_current = cur;
             }
             return 0;
         }
@@ -453,6 +456,7 @@ int validate_label(char *ptr)
 int pass_second(struct instruction *root)
 {
     struct label_entry *cur = NULL;
+    struct symbol_entry *cur_sym = NULL;
     struct instruction *instd = NULL;
     int i = 0;
 
@@ -484,6 +488,13 @@ int pass_second(struct instruction *root)
     }
 #endif
 
+    if (symbol_root) {
+        cur_sym = symbol_root;
+        while (cur_sym) {
+            printf("symbol: %s %s\n", cur_sym->name, cur_sym->instruction->operands[0]);
+            cur_sym = cur_sym->next;
+        }
+    }
 
     return 0;
 }
