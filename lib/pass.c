@@ -193,7 +193,7 @@ int add_symbol(struct instruction *tmp_i)
 {
     struct symbol_entry *cur;
 
-    if ((tmp_i->operands[0][0] == '=')) {
+    if (tmp_i->operands && (tmp_i->operands[0][0] == '=')) {
         if (validate_label(tmp_i->mnumonic)) {
 
             cur = new_symbol(); 
