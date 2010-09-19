@@ -17,6 +17,12 @@
 #define ERR_BADLABEL "Invalid Label"
 #define ERR_MALLOC "Out of heap memory - seriously?"
 
+/* put a 4-byte integer into a byte array in LSB order or MSB order */
+/* from Mark Adler's pigz source */
+#define PUT2L(a,b) (*(a)=(b)&0xff,(a)[1]=(b)>>8)
+#define PUT4L(a,b) (PUT2L(a,(b)&0xffff),PUT2L((a)+2,(b)>>16))
+#define PUT4M(a,b) (*(a)=(b)>>24,(a)[1]=(b)>>16,(a)[2]=(b)>>8,(a)[3]=(b))
+
 typedef unsigned char byte;
 
 struct instruction {
