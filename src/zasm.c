@@ -174,13 +174,11 @@ int main(int ac, char **av)
 
   if (!(infile = fopen(av[optind], "r"))) {
     printf("error: with source file \"%s\"\n", av[optind]);
-    show_help(1);
     exit(1);
   }
 
   if (!(outfile = fopen(av[optind+1], "w"))) {
     printf("error: with output file %s\n", av[optind+1]);
-    show_help(1);
     exit(1);
   }
 
