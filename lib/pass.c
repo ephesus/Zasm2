@@ -13,7 +13,6 @@
 #include <string.h>
 #include "../include/zasm.h"
 #include "../config.h"
-#include "ctype.h"
 #include "pass.h"
 
 void strip_comment(char *ptr)
@@ -182,13 +181,14 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
         } else {
             if (add_symbol(tmp_i)) {
                 //reached word not in table file, also not understood by zasm2
-                printf("bad symbol: %s\n", tmp_i->mnumonic);
+                printf("bad instruction: %s\n", tmp_i->mnumonic);
                 do_error_msg(ERR_PARSE);
             }
         }
     }
 }
 
+/* add symbol to symbol table (_textShadow = $f34e) etc */
 int add_symbol(struct instruction *tmp_i)
 {
     struct symbol_entry *cur;
