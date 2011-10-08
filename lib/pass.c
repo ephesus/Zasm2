@@ -43,11 +43,23 @@ int assemble(struct tab_entry *tabroot, FILE *infile)
     return result;
 }
 
+int write_to_file(struct instruction * root)
+{
+    struct instruction *instw;
+
+    instw = root;
+
+    while (instw) {
+        instw = NULL;
+    }
+    return 0;
+}
+
 int check_for_symbol(const char *operand)
 {
     int i;
 
-    for (i=0; i<NUM_SYMBOLS_TO_CHECK; i++) 
+    for (i=0; i<NUM_SYMBOLS_TO_CHECK; i++)
     {
         if (strcmp(REGISTERS[i], operand) == 0) {
             return 1;
@@ -62,7 +74,7 @@ void append_string(char *target, const char *addition)
     char *tmp;
 
     tmp = target;
-    while (*tmp) 
+    while (*tmp)
     {
         tmp++;
     }
@@ -71,15 +83,15 @@ void append_string(char *target, const char *addition)
     strcpy(tmp, addition);
 }
 
-char *capitalize(char *buf) 
+char *capitalize(char *buf)
 {
     char *tmp;
 
     tmp = buf;
 
-    while (*tmp) 
+    while (*tmp)
     {
-        if (isalpha(*tmp)) 
+        if (isalpha(*tmp))
             *tmp = toupper(*tmp);
         tmp++;
     }
@@ -89,18 +101,18 @@ char *capitalize(char *buf)
 
 /* Figure out the generic string representing the individual
  * instruction in the TABLE file. The instruction is already
- * matched so it's only the operands 
- */ 
+ * matched so it's only the operands
+ */
 char *calculate_query_string(struct instruction *tmp_i)
 {
     char *query;
     char tmp_str[10];
     int i;
 
-    query = (char *) malloc(INSTRUCTION_BUFFER_SIZE); 
+    query = (char *) malloc(INSTRUCTION_BUFFER_SIZE);
     query[0] = '\0';
 
-    for (i = 0; i < tmp_i->op_num; i++) 
+    for (i = 0; i < tmp_i->op_num; i++)
     {
         if (i > 0)
             append_string(query, ",");
@@ -134,7 +146,7 @@ struct tab_entry *match_operands_to_mnumonic(struct tab_entry *tab_match, const 
     tab_tmp = tab_match;
 
     //loop until we get to the next mnumonic or the end
-    while ((strcmp(current_mnumonic, tab_tmp->mnumonic) == 0) && (tab_tmp->next)) 
+    while ((strcmp(current_mnumonic, tab_tmp->mnumonic) == 0) && (tab_tmp->next))
     {
         if (strcmp(tab_tmp->operands, query_string) == 0) {
             //return a matched instruction
@@ -147,7 +159,7 @@ struct tab_entry *match_operands_to_mnumonic(struct tab_entry *tab_match, const 
 }
 
 /* wasn't a label, so assume it's an instruction */
-void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i) 
+void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
 {
     struct tab_entry *tab_match;
     struct tab_entry *tab_temp;
@@ -166,13 +178,13 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
         free(query_string);
     } else {
         // wasn't in tab file, preprocessor directive?
-        if ((strcmp(tmp_i->mnumonic, ".DW") == 0) || 
+        if ((strcmp(tmp_i->mnumonic, ".DW") == 0) ||
                 (strcmp(tmp_i->mnumonic, ".WORD") == 0)) {
 
-        } else if ((strcmp(tmp_i->mnumonic, ".DB") == 0) || 
+        } else if ((strcmp(tmp_i->mnumonic, ".DB") == 0) ||
                 (strcmp(tmp_i->mnumonic, ".BYTE") == 0)) {
 
-        } else if ((strcmp(tmp_i->mnumonic, ".INCLUDE") == 0) || 
+        } else if ((strcmp(tmp_i->mnumonic, ".INCLUDE") == 0) ||
                 (strcmp(tmp_i->mnumonic, ".REQUIRE") == 0)) {
 
         } else if (strcmp(tmp_i->mnumonic, ".ORG") == 0) {
@@ -196,12 +208,12 @@ int add_symbol(struct instruction *tmp_i)
     if (tmp_i->operands && (tmp_i->operands[0][0] == '=')) {
         if (validate_label(tmp_i->mnumonic)) {
 
-            cur = new_symbol(); 
+            cur = new_symbol();
             cur->name = tmp_i->mnumonic;
-            cur->instruction = tmp_i; 
+            cur->instruction = tmp_i;
 
             //if first symbol, set it to root
-            if (!symbol_root) { 
+            if (!symbol_root) {
                 symbol_root = cur;
                 symbol_current = cur;
             } else {
@@ -215,7 +227,7 @@ int add_symbol(struct instruction *tmp_i)
     return 1;
 }
 
-struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *tab_match) 
+struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *tab_match)
 {
     if (!(tab_match = match_operands_to_mnumonic(tab_match, query_string))) {
         //check if one operand is value or label
@@ -226,15 +238,15 @@ struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *t
     return tab_match;
 }
 
-struct tab_entry *match_mnumonic(struct tab_entry *tabroot, struct instruction *instruction) 
+struct tab_entry *match_mnumonic(struct tab_entry *tabroot, struct instruction *instruction)
 {
     struct tab_entry *tmp_tab = NULL;
 
     tmp_tab = tabroot;
 
-    while (tmp_tab) 
+    while (tmp_tab)
     {
-        if (strcmp(instruction->mnumonic, tmp_tab->mnumonic) == 0) 
+        if (strcmp(instruction->mnumonic, tmp_tab->mnumonic) == 0)
             return tmp_tab;
 
         tmp_tab = tmp_tab->next;
@@ -259,7 +271,7 @@ struct symbol_entry *new_symbol()
     return tmp;
 }
 
-struct label_entry *new_label() 
+struct label_entry *new_label()
 {
     struct label_entry *tmp;
 
@@ -270,7 +282,7 @@ struct label_entry *new_label()
     return tmp;
 }
 
-struct instruction *new_instruction() 
+struct instruction *new_instruction()
 {
     struct instruction *cur;
 
@@ -283,15 +295,15 @@ struct instruction *new_instruction()
     return cur;
 }
 
-char *remove_whitespace(char * buf) 
+char *remove_whitespace(char * buf)
 {
     int i, t;
     char tmp[INSTRUCTION_BUFFER_SIZE];
 
     i = t = 0;
-    while (buf[i]) 
+    while (buf[i])
     {
-        if (!isblank(buf[i])) 
+        if (!isblank(buf[i]))
             tmp[t++] = buf[i];
 
         i++;
@@ -307,7 +319,7 @@ char *remove_whitespace(char * buf)
 struct instruction *pass_first(FILE *infile, struct tab_entry *tabroot)
 {
     struct instruction *root = NULL;
-    label_root = NULL; 
+    label_root = NULL;
 
     /** build up the basic tree from the source file(s)
      * descends recursively into included source files
@@ -321,20 +333,20 @@ struct instruction *pass_first(FILE *infile, struct tab_entry *tabroot)
  * removed. Now go through the rest and assume they're instructions
  * separated with ','
  */
-struct instruction *get_operands(struct instruction *cur) 
+struct instruction *get_operands(struct instruction *cur)
 {
     int cur_op_num;
     char *buf;
 
     /* check for operands */
     cur_op_num = 0;
-    while ((buf = (char *) strtok(NULL, comma))) 
+    while ((buf = (char *) strtok(NULL, comma)))
     {
         remove_whitespace(buf); //remove any tabs etc.
         if (strlen(buf) > 0) {
-            if (!cur->operands) 
+            if (!cur->operands)
                 cur->operands = (char **) malloc(sizeof( char *));
-            else 
+            else
                 cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
 
             capitalize(buf);
@@ -349,7 +361,7 @@ struct instruction *get_operands(struct instruction *cur)
 }
 
 /** Parse text file and create
- * tree elements for each instruction 
+ * tree elements for each instruction
  * appends instructions to the end of the tree it gets
  * so that you can call this more than once, to include
  * more than one file
@@ -372,12 +384,12 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
     inst_root = initial_root;
     buf = b;
 
-    while (fgets(buffer, INSTRUCTION_BUFFER_SIZE, infile)) 
+    while (fgets(buffer, INSTRUCTION_BUFFER_SIZE, infile))
     {
         strip_comment(buffer);
         linenumber++;
 
-        if (cur == NULL) 
+        if (cur == NULL)
             cur = new_instruction();
 
         if (isblank(buffer[0]) || (buffer[0] == '\n') || (buffer[0] == '#') || (buffer[0] == '.')) {
@@ -411,7 +423,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
             if (strlen(buffer) > 0) {
                 if (validate_label(buffer))
                     attach_label(buffer, cur);
-                else 
+                else
                     do_error_msg(ERR_BADLABEL);
 
             }
@@ -423,7 +435,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
 }
 
 /*  add a label_entry to the big list */
-void attach_label(char *ptr, struct instruction *inst) 
+void attach_label(char *ptr, struct instruction *inst)
 {
     struct label_entry *tmp;
 
@@ -441,12 +453,12 @@ void attach_label(char *ptr, struct instruction *inst)
 }
 
 /* make sure that the label is a valid label with ascii chars
- * if it's not valid, return a false 
+ * if it's not valid, return a false
  * */
-int validate_label(char *ptr) 
+int validate_label(char *ptr)
 {
     int valid = 1;
-    while (*ptr != '\0') 
+    while (*ptr != '\0')
     {
         if (!(isalnum(*ptr) || (*ptr == '-') || (*ptr == '_') || (*ptr == '.') || (*ptr == '@')))
             valid = 0;
@@ -468,26 +480,26 @@ int pass_second(struct instruction *root)
 #ifdef DEBUG
     instd = root;
     //loop through instructions
-    while (instd) 
+    while (instd)
     {
         if (instd->not_reduced) {
             printf("   inst: %s  :\n", instd->mnumonic);
             printf("    matched_tab: %p  :\n",  instd->matched_tab);
-            for(i = 0; i < instd->op_num; i++) 
+            for(i = 0; i < instd->op_num; i++)
                 printf("\t:opnd: %s\n", instd->operands[i]);
         }
         instd = instd->next;
     }
 
     cur = label_root;
-    while (cur) 
+    while (cur)
     {
         instd = cur->instruction;
 
         //print all labels and operands
         printf("label: %s  :\n", cur->name);
         printf("   inst: %s  :\n", instd->mnumonic);
-        for(i = 0; i < instd->op_num; i++) 
+        for(i = 0; i < instd->op_num; i++)
             printf("\t:opnd: %s\n", instd->operands[i]);
 
 
@@ -497,7 +509,7 @@ int pass_second(struct instruction *root)
 
     if (symbol_root) {
         cur_sym = symbol_root;
-        while (cur_sym) 
+        while (cur_sym)
         {
             printf("symbol: %s %s\n", cur_sym->name, cur_sym->instruction->operands[0]);
             cur_sym = cur_sym->next;
