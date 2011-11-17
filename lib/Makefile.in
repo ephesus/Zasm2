@@ -1,0 +1,8 @@
+all:
+	gcc $(CFLAGS) -c pass.c -o pass.o	
+
+clean:
+	rm -f pass.o
+
+distclean: clean
+	rm -f Makefile

@@ -1,0 +1,19 @@
+OBJS =  ../lib/pass.o\
+	help.o\
+	zasm.o
+CFLAGS = -O2 -ffast-math -fomit-frame-pointer
+CC = gcc
+
+all:	help.o zasm.o
+	$(CC) -o zasm $(CFLAGS) $(OBJS)
+
+clean:
+	rm -f *.o
+	rm -f *~
+	rm -f *\#
+	rm -f zasm
+	rm -f woo
+
+distclean: clean
+	rm -f Makefile
+
