@@ -68,9 +68,9 @@ struct instruction *pass_first(FILE *infile, struct tab_entry *table)
 	return root;
 }
 
-/** Dirty cludge, parse text file and create
+/** Parse text file and create
  * tree elements for each instruction 
- * Appends instructions to the end of the tree it gets
+ * appends instructions to the end of the tree it gets
  * so that you can call this more than once, to include
  * more than one file
  * if you call it passing a root that is null, it will return
