@@ -8,13 +8,6 @@ Released under the GPL.
 This project is now using git instead of cvs. The sourceforge repository
 still exists for cvs, but it will be out of date as of June 25, 2009.
 
-To try out the cvs:
-
- cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/zasm2 -z3 co zasm
- cd zasm
- ./configure
- make
-
 patches and comments are always welcome. I dont know much about
 assembler design, so i'm sure it's pretty ugly.
 
