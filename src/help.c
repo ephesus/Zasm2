@@ -1,3 +1,13 @@
+/*  Zasm2 Z80 assembler
+ *  by James Lee Rubingh
+ *  james@wrive.com
+ *
+ *  Copyright (2007) James Rubingh
+ *  Released under the GPL v2
+ *
+ *  査読お願いします!
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/zasm.h"

@@ -1,3 +1,13 @@
+/*  Zasm2 Z80 assembler
+ *  by James Lee Rubingh
+ *  james@wrive.com
+ *
+ *  Copyright (2007) James Rubingh
+ *  Released under the GPL v2
+ *
+ *  査読お願いします!
+ */
+
 struct instruction *pass_first(FILE *, struct tab_entry*);
 int pass_second(struct instruction *);
 struct instruction *parse_source(FILE *, struct instruction*);
