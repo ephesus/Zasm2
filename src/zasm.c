@@ -122,7 +122,7 @@ int main(int ac, char **av)
 			case 'T':
 				/* set up table file handle */
 				if (!(tabfile = fopen(optarg, "r"))) {
-					printf("Error opening tabfile: %s\n");
+					printf("Error opening tabfile: %s\n", optarg);
 					exit(1);
 				}
 				break;

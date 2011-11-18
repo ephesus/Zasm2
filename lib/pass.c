@@ -204,7 +204,7 @@ int pass_second(struct instruction *root)
 		cur = cur->next;
 
 		instd = cur->instruction;
-		printf("   inst: %s  :\n", instd->opcode);
+		printf("   inst: %s  :\n", instd->mnumonic);
 
 	}
 	return 0;
