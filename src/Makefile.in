@@ -17,3 +17,12 @@ clean:
 distclean: clean
 	rm -f Makefile
 
+install: 
+	cp -v ./zasm /usr/local/bin/
+	mkdir /usr/local/share/zasm
+	cp -v ./TASM80.TAB /usr/local/share/zasm
+
+uninstall:
+	rm -f /usr/local/bin/zasm
+	rm -f /usr/local/share/zasm/TASM80.TAB
+	rmdir /usr/local/share/zasm
