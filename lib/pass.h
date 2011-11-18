@@ -2,7 +2,7 @@
  *  by James Lee Rubingh
  *  james@wrive.com
  *
- *  Copyright (2007) James Rubingh
+ *  Copyright (2002) James Rubingh
  *  Released under the GPL v2
  *
  *  査読お願いします!
