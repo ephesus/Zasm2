@@ -44,8 +44,7 @@ void strip_comment(char *ptr)
 /*! parse the table file and create a list 
   with all of the possible instructions */
 struct tab_entry *read_table(FILE *tabfile) {
-  struct tab_entry *root = NULL;
-  struct tab_entry *temp = NULL;
+  struct tab_entry *root, *temp = NULL;
   char buffer[TABFILE_BUFFER_SIZE];
   char hexbuf[TABFILE_BUFFER_SIZE];
   char *buf, *endptr;
