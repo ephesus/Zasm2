@@ -96,7 +96,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
   char buffer[INSTRUCTION_BUFFER_SIZE];
   char b[INSTRUCTION_BUFFER_SIZE];
   char *buf, *ptr;
-  int instructions =0;
+  int instructions = 0;
   int cur_op_num;
 
   inst_root = initial_root;
