@@ -162,7 +162,6 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
       /* the first char wasnt blank, so see if it's a label
        * or a declaration or whatever
        */
-      strip_comment(buffer);
       if (validate_label(buffer)) 
         attach_label(buffer, cur);
     }
@@ -193,8 +192,8 @@ void attach_label(char *ptr, struct instruction *inst) {
 /* make sure that the label is a valid label with ascii chars
  * if it's not valid, return a false */
 int validate_label(char *ptr) {
-  while (*(ptr++) != '\0') {
-    if (isalpha(*ptr))
+  while (*ptr != '\0') {
+    if (isalpha(*ptr++))
       return 1;
   }
   return 0;
