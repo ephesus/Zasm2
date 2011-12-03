@@ -50,6 +50,9 @@ extern struct label_entry *label_current;
 extern struct label_entry *label_latest_unset;
 extern struct tab_entry *read_table(FILE*);
 extern void strip_comment(char *);
+extern void do_error_msg(char *);
+extern void do_error();
+extern void free_lists();
 void post_process(int mode);
 
 /* pass.c */
