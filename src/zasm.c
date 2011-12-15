@@ -22,6 +22,7 @@
 int verbose = 0;
 int tistring = 0;
 int tiprog = 0;
+double linenumber = 0;
 struct label_entry* label_root;
 struct label_entry *label_latest_unset;
 struct label_entry *label_current;
@@ -40,14 +41,12 @@ void strip_comment(char *ptr)
 }
 
 void do_error() {
-    printf("Error Occurred - Closing\n");
-    free_lists();
+    printf("Error: line %f - Closing\n", linenumber);
     exit(EIO);
 }
 
 void do_error_msg(char *message) {
-    printf("Error: %s\n", message);
-    free_lists();
+    printf("Error: line %.0f - %s\n", linenumber, message);
     exit(EIO);
 }
 
