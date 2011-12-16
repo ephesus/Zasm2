@@ -109,6 +109,13 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
     strip_comment(buffer);
     linenumber++;
 
+    if (cur == NULL) {
+        cur = (struct instruction *) malloc(sizeof(struct instruction));
+        cur->next = NULL;
+        cur->operands = NULL;
+    }
+
+
     if (isblank(buffer[0]) || (buffer[0] == '\n')) {
       /** if the first char is blank, treat as an instruction
        * or a blank line.
@@ -116,12 +123,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
 
       /** split up line, get instruction and operands */
       if ((buf = (char *) strtok(buffer, whitespace))) {
-        /* keep count of instructions */
         instructions++;
-
-        cur = (struct instruction *) malloc(sizeof(struct instruction));
-        cur->next = NULL;
-        cur->operands = NULL;
 
         /* if first element, point root to it */
         if (!inst_root)
@@ -161,6 +163,9 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
 
       /* set cur_old for next iteration */
       cur_old = cur;
+      cur = (struct instruction *) malloc(sizeof(struct instruction));
+      cur->next = NULL;
+      cur->operands = NULL;
 
     } else {
       /* the first char wasnt blank, so see if it's a label
