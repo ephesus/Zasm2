@@ -218,11 +218,10 @@ int pass_second(struct instruction *root)
   cur = label_root;
   while (cur) {
     printf("label: %s  :\n", cur->name);
-    cur = cur->next;
-
     instd = cur->instruction;
     printf("   inst: %s  :\n", instd->mnumonic);
 
+    cur = cur->next;
   }
   return 0;
 }
