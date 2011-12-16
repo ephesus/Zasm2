@@ -199,7 +199,6 @@ void attach_label(char *ptr, struct instruction *inst) {
   label_current = tmp;
   tmp->name = (char *)malloc(strlen(ptr) * sizeof(char));
   strcpy(tmp->name, ptr);
-	printf("attaching %s\n", ptr);
 }
 
 /* make sure that the label is a valid label with ascii chars
