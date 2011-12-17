@@ -62,6 +62,30 @@ struct tab_entry *match_opcode(struct instruction *instruction)
     return tmp_tab;
 }
 
+struct label_entry *new_label() {
+    struct label_entry *tmp;
+
+    if (!(tmp = (struct label_entry *) malloc(sizeof(struct label_entry)))) {
+        do_error_msg(ERR_MALLOC);
+    }
+    tmp->instruction = NULL;
+    tmp->next = NULL;
+    tmp->name = NULL;
+    return tmp;
+}
+
+struct instruction *new_instruction() {
+    struct instruction *cur;
+
+    if (!(cur = (struct instruction *) malloc(sizeof(struct instruction)))) {
+        do_error_msg(ERR_MALLOC);
+    }
+    cur->next = NULL;
+    cur->operands = NULL;
+
+    return cur;
+}
+
 /** go through the source file(s) and create a
  * data structure with all the info about instruction sizes
  * and opcodes for all instructions without labels
@@ -109,11 +133,8 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
         linenumber++;
 
         if (cur == NULL) {
-            cur = (struct instruction *) malloc(sizeof(struct instruction));
-            cur->next = NULL;
-            cur->operands = NULL;
+            cur = new_instruction();
         }
-
 
         if (isblank(buffer[0]) || (buffer[0] == '\n')) {
             /** if the first char is blank, treat as an instruction
@@ -158,9 +179,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
 
             /* set cur_old for next iteration */
             cur_old = cur;
-            cur = (struct instruction *) malloc(sizeof(struct instruction));
-            cur->next = NULL;
-            cur->operands = NULL;
+            cur = new_instruction();
 
         } else {
             /* see if it's a valid label */
@@ -172,7 +191,6 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
                 }
             }
         }
-
     }
 
     /* return either the root or the tail */
@@ -183,7 +201,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
 void attach_label(char *ptr, struct instruction *inst) {
     struct label_entry *tmp;
 
-    tmp = (struct label_entry*) malloc(sizeof(struct label_entry));
+    tmp = new_label();
     tmp->instruction = inst;
 
     if (label_root == NULL)
@@ -221,10 +239,11 @@ int pass_second(struct instruction *root)
         instd = cur->instruction;
 
 #ifdef DEBUG
+        //print all labels and 
         printf("label: %s  :\n", cur->name);
         printf("   inst: %s  :\n", instd->mnumonic);
         for(i = 0; i < instd->op_num; i++) {
-            printf("      :opnd: %s\n", instd->operands[i]);
+            printf("\t:opnd: %s\n", instd->operands[i]);
         }
 #endif
 
@@ -232,5 +251,3 @@ int pass_second(struct instruction *root)
     }
     return 0;
 }
-
-
