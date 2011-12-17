@@ -15,7 +15,7 @@ int assemble(struct tab_entry *, FILE *);
 int apply_table(struct instruction *, struct tab_entry*);
 int validate_label(char *);
 void attach_label(char *, struct instruction *);
-struct tab_entry *match_opcode(struct instruction *);
+struct tab_entry *match_opcode(struct tab_entry *, struct instruction *);
 struct instruction *new_instruction();
 struct label_entry *new_label();
 

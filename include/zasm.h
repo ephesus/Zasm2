@@ -35,6 +35,7 @@ struct tab_entry {
     unsigned int UNKNOWN_VALUE;
     int UNKNOWN_VALUE2;
     int UNKNOWN_VALUE3;
+    struct tab_entry *next;
 } __attribute__((__packed__));
 
 struct label_entry {

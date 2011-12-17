@@ -57,7 +57,9 @@ void free_lists() {
 /*! parse the table file and create a list 
   with all of the possible instructions */
 struct tab_entry *read_table(FILE *tabfile) {
-    struct tab_entry *root, *temp = NULL;
+    struct tab_entry *root = NULL;
+    struct tab_entry *temp = NULL;
+    struct tab_entry *old_tmp = NULL;
     char buffer[TABFILE_BUFFER_SIZE];
     char hexbuf[TABFILE_BUFFER_SIZE];
     char *buf, *endptr;
@@ -88,6 +90,13 @@ struct tab_entry *read_table(FILE *tabfile) {
             printf("mnumonic: %s\n operand: %s\n hexcode: %s\n opcode: %d\n size: %d\n",
                     temp->mnumonic, temp->operands, temp->hex_code, temp->opcode, temp->size);
 #endif
+            /* start linked list, or add to it  */
+            if (root == NULL) {
+                root = temp;
+                old_tmp = temp;
+            } else {
+                old_tmp->next = temp;
+            }
         }
     }
 #ifdef DEBUG
