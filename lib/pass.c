@@ -6,7 +6,7 @@
     Released under the GPL v2
 
     査読お願いします!
-*/
+    */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,15 +20,15 @@
 /* starting new file */
 int assemble(struct tab_entry *tabroot, FILE *infile)
 {
-  int result = 0;
-  linenumber = 0;
+    int result = 0;
+    linenumber = 0;
 
-  struct instruction *root;
+    struct instruction *root;
 
-  root = pass_first(infile, tabroot);
-  result = pass_second(root);
+    root = pass_first(infile, tabroot);
+    result = pass_second(root);
 
-  return result;
+    return result;
 }
 
 /** Go through the tree of instructions and put in opcodes from the
@@ -36,30 +36,30 @@ int assemble(struct tab_entry *tabroot, FILE *infile)
  */
 int apply_table(struct instruction* root, struct tab_entry* table)
 {
-  struct instruction *tmp_i;
-  struct tab_entry *tab_match;
-  int num_of_instructions=0;
+    struct instruction *tmp_i;
+    struct tab_entry *tab_match;
+    int num_of_instructions=0;
 
-  if (root == NULL)
-    return -1;
+    if (root == NULL)
+        return -1;
 
-  tmp_i = root;
-  while (tmp_i) {
-    tab_match = match_opcode(tmp_i);
-    tmp_i = tmp_i->next;
-    num_of_instructions++;
-  }
-  return num_of_instructions;
+    tmp_i = root;
+    while (tmp_i) {
+        tab_match = match_opcode(tmp_i);
+        tmp_i = tmp_i->next;
+        num_of_instructions++;
+    }
+    return num_of_instructions;
 }
 
 struct tab_entry *match_opcode(struct instruction *instruction) 
 {
-  struct tab_entry *tmp_tab = NULL;
+    struct tab_entry *tmp_tab = NULL;
 
-  printf("%s - ", instruction->mnumonic);
-  printf("%u\n", instruction->opcode);
+    printf("%s - ", instruction->mnumonic);
+    printf("%u\n", instruction->opcode);
 
-  return tmp_tab;
+    return tmp_tab;
 }
 
 /** go through the source file(s) and create a
@@ -68,16 +68,16 @@ struct tab_entry *match_opcode(struct instruction *instruction)
  */
 struct instruction *pass_first(FILE *infile, struct tab_entry *table)
 {
-  struct instruction *root = NULL;
-  label_root = NULL; 
+    struct instruction *root = NULL;
+    label_root = NULL; 
 
-  /** build up the basic tree from the source file(s)
-   * descends recursively into included source files
-   */
-  root = parse_source(infile, root);
-  apply_table(root, table);
+    /** build up the basic tree from the source file(s)
+     * descends recursively into included source files
+     */
+    root = parse_source(infile, root);
+    apply_table(root, table);
 
-  return root;
+    return root;
 }
 
 /** Parse text file and create
@@ -93,118 +93,118 @@ struct instruction *pass_first(FILE *infile, struct tab_entry *table)
 struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
 {
 
-  struct instruction *cur_old =NULL, *cur = NULL;
-  struct instruction *inst_root;
-  char buffer[INSTRUCTION_BUFFER_SIZE];
-  char b[INSTRUCTION_BUFFER_SIZE];
-  char *buf, *ptr;
-  int instructions = 0;
-  int cur_op_num;
+    struct instruction *cur_old =NULL, *cur = NULL;
+    struct instruction *inst_root;
+    char buffer[INSTRUCTION_BUFFER_SIZE];
+    char b[INSTRUCTION_BUFFER_SIZE];
+    char *buf, *ptr;
+    int instructions = 0;
+    int cur_op_num;
 
-  inst_root = initial_root;
-  buf = b;
+    inst_root = initial_root;
+    buf = b;
 
-  while (fgets(buffer, INSTRUCTION_BUFFER_SIZE, infile)) {
-    strip_comment(buffer);
-    linenumber++;
+    while (fgets(buffer, INSTRUCTION_BUFFER_SIZE, infile)) {
+        strip_comment(buffer);
+        linenumber++;
 
-    if (cur == NULL) {
-        cur = (struct instruction *) malloc(sizeof(struct instruction));
-        cur->next = NULL;
-        cur->operands = NULL;
+        if (cur == NULL) {
+            cur = (struct instruction *) malloc(sizeof(struct instruction));
+            cur->next = NULL;
+            cur->operands = NULL;
+        }
+
+
+        if (isblank(buffer[0]) || (buffer[0] == '\n')) {
+            /** if the first char is blank, treat as an instruction
+             * or a blank line.
+             */
+
+            /** split up line, get instruction and operands */
+            if ((buf = (char *) strtok(buffer, whitespace))) {
+                instructions++;
+
+                /* if first element, point root to it */
+                if (!inst_root)
+                    inst_root = cur;
+
+                /* attach new link to the end of list */
+                if (cur_old)
+                    cur_old->next = cur;
+
+                /* convert to uppercase */
+                ptr = buf;
+                do {
+                    *ptr = toupper(*ptr);
+                } while (*(ptr++) != '\0');
+
+                strcpy(cur->mnumonic, buf);
+
+                /* check for operands */
+                cur_op_num = 0;
+                while ((buf = (char *) strtok(NULL, whitespace))) {
+                    if (!cur->operands) 
+                        cur->operands = (char **) malloc(sizeof( char *));
+                    else 
+                        cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
+
+                    cur->operands[cur_op_num] = (char *) malloc(strlen(buf) );
+                    strcpy(cur->operands[cur_op_num], buf);
+
+                    cur->op_num = ++cur_op_num;
+                }
+                cur->op_num = cur_op_num;
+            }
+
+            /* set cur_old for next iteration */
+            cur_old = cur;
+            cur = (struct instruction *) malloc(sizeof(struct instruction));
+            cur->next = NULL;
+            cur->operands = NULL;
+
+        } else {
+            /* see if it's a valid label */
+            if (strlen(buffer) > 0) {
+                if (validate_label(buffer)) {
+                    attach_label(buffer, cur);
+                } else {
+                    do_error_msg(ERR_PARSE);
+                }
+            }
+        }
+
     }
 
-
-    if (isblank(buffer[0]) || (buffer[0] == '\n')) {
-      /** if the first char is blank, treat as an instruction
-       * or a blank line.
-       */
-
-      /** split up line, get instruction and operands */
-      if ((buf = (char *) strtok(buffer, whitespace))) {
-        instructions++;
-
-        /* if first element, point root to it */
-        if (!inst_root)
-          inst_root = cur;
-
-        /* attach new link to the end of list */
-        if (cur_old)
-          cur_old->next = cur;
-
-        /* convert to uppercase */
-        ptr = buf;
-        do {
-          *ptr = toupper(*ptr);
-        } while (*(ptr++) != '\0');
-
-        strcpy(cur->mnumonic, buf);
-
-        /* check for operands */
-        cur_op_num = 0;
-        while ((buf = (char *) strtok(NULL, whitespace))) {
-          if (!cur->operands) 
-            cur->operands = (char **) malloc(sizeof( char *));
-          else 
-            cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
-
-          cur->operands[cur_op_num] = (char *) malloc(strlen(buf) );
-          strcpy(cur->operands[cur_op_num], buf);
-
-          cur->op_num = ++cur_op_num;
-        }
-        cur->op_num = cur_op_num;
-      }
-
-      /* set cur_old for next iteration */
-      cur_old = cur;
-      cur = (struct instruction *) malloc(sizeof(struct instruction));
-      cur->next = NULL;
-      cur->operands = NULL;
-
-    } else {
-      /* see if it's a valid label */
-			if (strlen(buffer) > 0) {
-      	if (validate_label(buffer)) {
-        	attach_label(buffer, cur);
-      	} else {
-        	do_error_msg(ERR_PARSE);
-      	}
-    	}
-		}
-
-  }
-
-  /* return either the root or the tail */
-  return initial_root == NULL ? inst_root : cur;
+    /* return either the root or the tail */
+    return initial_root == NULL ? inst_root : cur;
 }
 
 /*  add a label_entry to the big list */
 void attach_label(char *ptr, struct instruction *inst) {
-  struct label_entry *tmp;
+    struct label_entry *tmp;
 
-  tmp = (struct label_entry*) malloc(sizeof(struct label_entry));
-  tmp->instruction = inst;
+    tmp = (struct label_entry*) malloc(sizeof(struct label_entry));
+    tmp->instruction = inst;
 
-  if (label_root == NULL)
-    label_root = tmp;
-  else
-    label_current->next = tmp;
+    if (label_root == NULL)
+        label_root = tmp;
+    else
+        label_current->next = tmp;
 
-  label_current = tmp;
-  tmp->name = (char *)malloc(strlen(ptr) * sizeof(char));
-  strcpy(tmp->name, ptr);
+    label_current = tmp;
+    tmp->name = (char *)malloc(strlen(ptr) * sizeof(char));
+    strcpy(tmp->name, ptr);
 }
 
 /* make sure that the label is a valid label with ascii chars
  * if it's not valid, return a false */
 int validate_label(char *ptr) {
-  int valid = 1;
-  while (*ptr != '\0') {
-    if (!isalnum(*ptr++))
-      valid = 0;
-  }
-  return valid;
+    int valid = 1;
+    while (*ptr != '\0') {
+        if (!isalnum(*ptr++))
+            valid = 0;
+    }
+    return valid;
 }
 
 /**  Go back through the instruction tree and using the list of
@@ -212,25 +212,25 @@ int validate_label(char *ptr) {
  */
 int pass_second(struct instruction *root)
 {
-  struct label_entry *cur = NULL;
-  struct instruction *instd = NULL;
-	int i = 0;
+    struct label_entry *cur = NULL;
+    struct instruction *instd = NULL;
+    int i = 0;
 
-  cur = label_root;
-  while (cur) {
-    instd = cur->instruction;
+    cur = label_root;
+    while (cur) {
+        instd = cur->instruction;
 
 #ifdef DEBUG
-    printf("label: %s  :\n", cur->name);
-    printf("   inst: %s  :\n", instd->mnumonic);
-		for(i = 0; i < instd->op_num; i++) {
-    	printf("      :opnd: %s\n", instd->operands[i]);
-		}
+        printf("label: %s  :\n", cur->name);
+        printf("   inst: %s  :\n", instd->mnumonic);
+        for(i = 0; i < instd->op_num; i++) {
+            printf("      :opnd: %s\n", instd->operands[i]);
+        }
 #endif
 
-    cur = cur->next;
-  }
-  return 0;
+        cur = cur->next;
+    }
+    return 0;
 }
 
 
