@@ -80,7 +80,7 @@ struct tab_entry *read_table(FILE *tabfile) {
                     //fill in hex code and opcode
                     strcpy(temp->hex_code, buf);
                     strcpy(hexbuf+2, buf);
-                    temp->opcode = (unsigned int)strtol(hexbuf, (char **)NULL, 0);
+                    temp->opcode = (unsigned int)strtol(hexbuf, (char **)NULL, 16);
                 } else if (temp->size == -1){
                     temp->size = atoi(buf);
                 }
@@ -96,6 +96,7 @@ struct tab_entry *read_table(FILE *tabfile) {
                 old_tmp = temp;
             } else {
                 old_tmp->next = temp;
+                old_tmp = temp;
             }
         }
     }
