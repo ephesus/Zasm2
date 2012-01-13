@@ -58,6 +58,7 @@ extern void do_error_msg(char *);
 extern void do_error();
 extern void free_lists();
 void post_process(int mode);
+struct tab_entry *new_tab_entry(char *);
 
 /* pass.c */
 extern int pass(struct instruction *, struct tab_entry *, FILE * infile);

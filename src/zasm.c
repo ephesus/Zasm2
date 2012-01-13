@@ -54,6 +54,17 @@ void free_lists() {
 
 }
 
+struct tab_entry* new_tab_entry(char *buf) {
+    struct tab_entry *new_tab_entry;
+
+    new_tab_entry =    (struct tab_entry *) malloc(sizeof(struct tab_entry));
+    memset(new_tab_entry, 0, sizeof(struct tab_entry));
+    strcpy(new_tab_entry->mnumonic, buf);
+    new_tab_entry->opcode = -1;
+    new_tab_entry->size = -1;
+    return new_tab_entry;
+}
+
 /*! parse the table file and create a list 
   with all of the possible instructions */
 struct tab_entry *read_table(FILE *tabfile) {
@@ -66,11 +77,7 @@ struct tab_entry *read_table(FILE *tabfile) {
 
     while (fgets(buffer, TABFILE_BUFFER_SIZE, tabfile)) {
         if (buf = (char *) strtok(buffer, tab_whitespace)) {
-            temp = (struct tab_entry *) malloc(sizeof(struct tab_entry));
-            memset(temp, 0, sizeof(struct tab_entry));
-            strcpy(temp->mnumonic, buf);
-            temp->opcode = -1;
-            temp->size = -1;
+            temp = new_tab_entry(buf);
             strcpy(hexbuf,"0x");
 
             while ((buf = (char *) strtok(NULL, tab_whitespace))) {
@@ -100,9 +107,6 @@ struct tab_entry *read_table(FILE *tabfile) {
             }
         }
     }
-#ifdef DEBUG
-    puts("Done exporting Table List");
-#endif
 
     return root;
 }
