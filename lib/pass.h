@@ -18,4 +18,5 @@ void attach_label(char *, struct instruction *);
 struct tab_entry *match_opcode(struct tab_entry *, struct instruction *);
 struct instruction *new_instruction();
 struct label_entry *new_label();
+char *remove_whitespace(char *);
 

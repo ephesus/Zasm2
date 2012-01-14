@@ -8,6 +8,7 @@
 #define INSTRUCTION_BUFFER_SIZE 1000
 #define TABFILE_BUFFER_SIZE 500
 #define whitespace " \t\r\n,"
+#define comma ","
 #define tab_whitespace " \t\r\n"
 #define DEBUG 
 #define ERR_PARSE "Couldn't parse"
