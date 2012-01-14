@@ -93,7 +93,7 @@ struct tab_entry *read_table(FILE *tabfile) {
                 }
             }
 
-#ifdef DEBUG
+#ifdef DEBUG2
             printf("mnumonic: %s\n operand: %s\n hexcode: %s\n opcode: %d\n size: %d\n",
                     temp->mnumonic, temp->operands, temp->hex_code, temp->opcode, temp->size);
 #endif
