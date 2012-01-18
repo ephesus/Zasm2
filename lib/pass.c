@@ -110,6 +110,20 @@ struct instruction *new_instruction() {
     return cur;
 }
 
+char *capitalize(char *buf) {
+    char *tmp;
+
+    tmp = buf;
+
+    while (*tmp) {
+        if (isalpha(*tmp)) 
+            *tmp = toupper(*tmp);
+        tmp++;
+    }
+
+    return buf;
+}
+
 char *remove_whitespace(char * buf) {
     int i, t;
     char tmp[INSTRUCTION_BUFFER_SIZE];
@@ -156,6 +170,7 @@ struct instruction *get_operands(struct instruction *cur) {
             cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
 
         remove_whitespace(buf);
+        capitalize(buf);
         cur->operands[cur_op_num] = (char *) malloc(strlen(buf) );
         strcpy(cur->operands[cur_op_num], buf);
 
@@ -209,7 +224,6 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
                 if (!inst_root)
                     inst_root = cur;
 
-                /* attach new link to the end of list */
                 if (cur_old)
                     cur_old->next = cur;
 
@@ -221,6 +235,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
 
                 strcpy(cur->mnumonic, buf);
 
+                /* attach any operands we find */
                 get_operands(cur);
             }
 
