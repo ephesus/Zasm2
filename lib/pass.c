@@ -143,6 +143,28 @@ struct instruction *pass_first(FILE *infile, struct tab_entry *tabroot)
     return root;
 }
 
+struct instruction *get_operands(struct instruction *cur) {
+    int cur_op_num;
+    char *buf;
+
+    /* check for operands */
+    cur_op_num = 0;
+    while ((buf = (char *) strtok(NULL, comma))) {
+        if (!cur->operands) 
+            cur->operands = (char **) malloc(sizeof( char *));
+        else 
+            cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
+
+        remove_whitespace(buf);
+        cur->operands[cur_op_num] = (char *) malloc(strlen(buf) );
+        strcpy(cur->operands[cur_op_num], buf);
+
+        cur->op_num = ++cur_op_num;
+    }
+    cur->op_num = cur_op_num;
+    return cur;
+}
+
 /** Parse text file and create
  * tree elements for each instruction 
  * appends instructions to the end of the tree it gets
@@ -199,21 +221,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
 
                 strcpy(cur->mnumonic, buf);
 
-                /* check for operands */
-                cur_op_num = 0;
-                while ((buf = (char *) strtok(NULL, comma))) {
-                    if (!cur->operands) 
-                        cur->operands = (char **) malloc(sizeof( char *));
-                    else 
-                        cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
-
-                    remove_whitespace(buf);
-                    cur->operands[cur_op_num] = (char *) malloc(strlen(buf) );
-                    strcpy(cur->operands[cur_op_num], buf);
-
-                    cur->op_num = ++cur_op_num;
-                }
-                cur->op_num = cur_op_num;
+                get_operands(cur);
             }
 
             /* set cur_old for next iteration */
