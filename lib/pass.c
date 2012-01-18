@@ -12,9 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../include/zasm.h"
-#include "ctype.h"
 #include "../config.h"
-
+#include "ctype.h"
 #include "pass.h"
 
 /* starting new file */
