@@ -1,5 +1,7 @@
+OPTS = 
+
 all:
-	gcc $(CFLAGS) -c pass.c -o pass.o	
+	gcc $(CFLAGS) $(OPTS) -c pass.c -o pass.o	
 
 clean:
 	rm -f pass.o
