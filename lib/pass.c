@@ -6,7 +6,7 @@
     Released under the GPL v2
 
     査読お願いします!
-    */
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,15 +45,17 @@ int apply_table(struct instruction* root, struct tab_entry* tabroot)
     tmp_i = root;
     while (tmp_i) {
         if (!(tab_match = match_opcode(tabroot, tmp_i))) {
-            /*wasn't in TASM80.TAB, preprocessor directive?
+            /* wasn't in TASM80.TAB, preprocessor directive?
              * going to have to clean this up later
              */
-            if ((strcmp(tmp_i->mnumonic, ".DW") == 0) || (strcmp(tmp_i->mnumonic, ".WORD") == 0)) {
+            if ((strcmp(tmp_i->mnumonic, ".DW") == 0) || 
+                    (strcmp(tmp_i->mnumonic, ".WORD") == 0)) {
                 //define raw data 16 bits
-            } else if ((strcmp(tmp_i->mnumonic, ".DB") == 0) || (strcmp(tmp_i->mnumonic, ".BYTE") == 0)) {
+            } else if ((strcmp(tmp_i->mnumonic, ".DB") == 0) || 
+                    (strcmp(tmp_i->mnumonic, ".BYTE") == 0)) {
                 //define raw data 8 bits
             } else if (strcmp(tmp_i->mnumonic, ".ORG") == 0) {
-                //set specific address
+                //set target address
             } else {
                 printf("bad symbol: %s\n", tmp_i->mnumonic);
                 do_error_msg(ERR_PARSE);
