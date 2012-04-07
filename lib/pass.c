@@ -232,10 +232,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
                     cur_old->next = cur;
 
                 /* convert to uppercase */
-                ptr = buf;
-                do {
-                    *ptr = toupper(*ptr);
-                } while (*(ptr++) != '\0');
+                capitalize(buf);
 
                 strcpy(cur->mnumonic, buf);
 
