@@ -80,9 +80,9 @@ struct tab_entry *match_opcode(struct tab_entry *tabroot, struct instruction *in
     tmp_tab = tabroot;
 
     while (tmp_tab) {
-        if (strcmp(instruction->mnumonic, tmp_tab->mnumonic) == 0) {
+        if (strcmp(instruction->mnumonic, tmp_tab->mnumonic) == 0) 
             return tmp_tab;
-        }    
+
         tmp_tab = tmp_tab->next;
     }
 
@@ -134,9 +134,9 @@ char *remove_whitespace(char * buf) {
 
     i = t = 0;
     while (buf[i]) {
-        if (!isblank(buf[i])) {
+        if (!isblank(buf[i])) 
             tmp[t++] = buf[i];
-        }
+
         i++;
     }
     tmp[t] = '\0';
@@ -247,11 +247,11 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
         } else {
             /* see if it's a valid label */
             if (strlen(buffer) > 0) {
-                if (validate_label(buffer)) {
+                if (validate_label(buffer))
                     attach_label(buffer, cur);
-                } else {
+                else 
                     do_error_msg(ERR_PARSE);
-                }
+
             }
         }
     }
@@ -305,9 +305,9 @@ int pass_second(struct instruction *root)
         //print all labels and operands
         printf("label: %s  :\n", cur->name);
         printf("   inst: %s  :\n", instd->mnumonic);
-        for(i = 0; i < instd->op_num; i++) {
+        for(i = 0; i < instd->op_num; i++) 
             printf("\t:opnd: %s\n", instd->operands[i]);
-        }
+
 #endif
 
         cur = cur->next;
