@@ -93,6 +93,7 @@ struct instruction *new_instruction() {
     cur->next = NULL;
     cur->previous = NULL;
     cur->operands = NULL;
+    cur->assembled = 0;
 
     return cur;
 }

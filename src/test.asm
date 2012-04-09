@@ -14,6 +14,7 @@ label2:
   ld	b	,	5
   .db 0, 1, 3, 4, 5, 6, 7, 8
 
+;David Phillip's RLE decompress routine
 DispRLE:
  ld bc,1024			; we need to copy 
 DispRLEL:

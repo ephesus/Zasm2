@@ -21,6 +21,7 @@ struct instruction {
     char **operands;
     unsigned int opcode;
     unsigned short int op_num;
+    unsigned short int assembled;
     struct instruction *next, *previous;
 } __attribute__((__packed__));
 
