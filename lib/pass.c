@@ -6,7 +6,7 @@
     Released under the GPL v2
 
     査読お願いします!
- */
+    */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,50 +30,33 @@ int assemble(struct tab_entry *tabroot, FILE *infile)
     return result;
 }
 
-/** Go through the tree of instructions and put in opcodes from the
- * table for things that dont use labels
- */
-int apply_table(struct instruction* root, struct tab_entry* tabroot)
-{
-    struct instruction *tmp_i;
+/* wasn't a label, so assume it's an instruction */
+void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i) {
     struct tab_entry *tab_match;
-    int num_of_instructions=0;
 
-    if (root == NULL)
-        return -1;
-
-    tmp_i = root;
-    while (tmp_i) {
-        if (!(tab_match = match_opcode(tabroot, tmp_i))) {
-            /* wasn't in TASM80.TAB, preprocessor directive?
-             * going to have to clean this up later
-             */
-            if ((strcmp(tmp_i->mnumonic, ".DW") == 0) || 
-                    (strcmp(tmp_i->mnumonic, ".WORD") == 0)) {
-                //define raw data 16 bits
-            } else if ((strcmp(tmp_i->mnumonic, ".DB") == 0) || 
-                    (strcmp(tmp_i->mnumonic, ".BYTE") == 0)) {
-                //define raw data 8 bits
-            } else if (strcmp(tmp_i->mnumonic, ".ORG") == 0) {
-                //set target address
-            } else {
-                printf("bad symbol: %s\n", tmp_i->mnumonic);
-                do_error_msg(ERR_PARSE);
-            }
-        }   
-
-#ifdef DEBUG
-        //opcode has been matched
-        printf("mn: %s\n", tmp_i->mnumonic);
-#endif
-
-        tmp_i = tmp_i->next;
-        num_of_instructions++;
+    if (!(tab_match = match_mnumonic(tabroot, tmp_i))) {
+        /* wasn't in TASM80.TAB, preprocessor directive?
+         * going to have to clean this up later
+         */
+        if ((strcmp(tmp_i->mnumonic, ".DW") == 0) || 
+                (strcmp(tmp_i->mnumonic, ".WORD") == 0)) {
+            return Z_DB;
+        } else if ((strcmp(tmp_i->mnumonic, ".DB") == 0) || 
+                (strcmp(tmp_i->mnumonic, ".BYTE") == 0)) {
+            return Z_DW;
+        } else if (strcmp(tmp_i->mnumonic, ".ORG") == 0) {
+            return Z_ORG;
+        } else {
+            //set assumed PC register value
+            printf("bad symbol: %s\n", tmp_i->mnumonic);
+            do_error_msg(ERR_PARSE);
+        }
+    } else {
+        /* MNUMONIC matched */
     }
-    return num_of_instructions;
 }
 
-struct tab_entry *match_opcode(struct tab_entry *tabroot, struct instruction *instruction) 
+struct tab_entry *match_mnumonic(struct tab_entry *tabroot, struct instruction *instruction) 
 {
     struct tab_entry *tmp_tab = NULL;
 
@@ -155,8 +138,7 @@ struct instruction *pass_first(FILE *infile, struct tab_entry *tabroot)
     /** build up the basic tree from the source file(s)
      * descends recursively into included source files
      */
-    root = parse_source(infile, root);
-    apply_table(root, tabroot);
+    root = parse_source(infile, root, tabroot);
 
     return root;
 }
@@ -194,7 +176,7 @@ struct instruction *get_operands(struct instruction *cur) {
  * if you pass it something other than null, it returns a pointer
  * to the last link of the tree
  */
-struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
+struct instruction *parse_source(FILE *infile, struct instruction* initial_root, struct tab_entry *tabroot)
 {
 
     struct instruction *cur_old =NULL, *cur = NULL;
@@ -239,6 +221,9 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root)
                 /* attach any operands we find */
                 get_operands(cur);
             }
+
+            /* instruction loaded, convert to opcode */
+            calculate_opcode(tabroot, cur);
 
             /* set cur_old for next iteration */
             cur_old = cur;
@@ -297,6 +282,16 @@ int pass_second(struct instruction *root)
     struct instruction *instd = NULL;
     int i = 0;
 
+#ifdef DEBUG
+    instd = root;
+    while (instd) {
+        printf("   inst: %s  :\n", instd->mnumonic);
+        for(i = 0; i < instd->op_num; i++) 
+            printf("\t:opnd: %s\n", instd->operands[i]);
+        instd = instd->next;
+    }
+#endif
+
     cur = label_root;
     while (cur) {
         instd = cur->instruction;
@@ -312,5 +307,7 @@ int pass_second(struct instruction *root)
 
         cur = cur->next;
     }
+
+
     return 0;
 }
