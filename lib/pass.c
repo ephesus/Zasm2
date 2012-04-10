@@ -72,7 +72,8 @@ struct tab_entry *match_mnumonic(struct tab_entry *tabroot, struct instruction *
     return NULL;
 }
 
-struct label_entry *new_label() {
+struct label_entry *new_label() 
+{
     struct label_entry *tmp;
 
     if (!(tmp = (struct label_entry *) malloc(sizeof(struct label_entry)))) {
@@ -84,7 +85,8 @@ struct label_entry *new_label() {
     return tmp;
 }
 
-struct instruction *new_instruction() {
+struct instruction *new_instruction() 
+{
     struct instruction *cur;
 
     if (!(cur = (struct instruction *) malloc(sizeof(struct instruction)))) {
@@ -98,7 +100,8 @@ struct instruction *new_instruction() {
     return cur;
 }
 
-char *capitalize(char *buf) {
+char *capitalize(char *buf) 
+{
     char *tmp;
 
     tmp = buf;
@@ -112,7 +115,8 @@ char *capitalize(char *buf) {
     return buf;
 }
 
-char *remove_whitespace(char * buf) {
+char *remove_whitespace(char * buf) 
+{
     int i, t;
     char tmp[INSTRUCTION_BUFFER_SIZE];
 
@@ -144,7 +148,8 @@ struct instruction *pass_first(FILE *infile, struct tab_entry *tabroot)
     return root;
 }
 
-struct instruction *get_operands(struct instruction *cur) {
+struct instruction *get_operands(struct instruction *cur) 
+{
     int cur_op_num;
     char *buf;
 
@@ -247,7 +252,8 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
 }
 
 /*  add a label_entry to the big list */
-void attach_label(char *ptr, struct instruction *inst) {
+void attach_label(char *ptr, struct instruction *inst) 
+{
     struct label_entry *tmp;
 
     tmp = new_label();
@@ -265,7 +271,8 @@ void attach_label(char *ptr, struct instruction *inst) {
 
 /* make sure that the label is a valid label with ascii chars
  * if it's not valid, return a false */
-int validate_label(char *ptr) {
+int validate_label(char *ptr) 
+{
     int valid = 1;
     while (*ptr != '\0') {
         if (!isalnum(*ptr++))
@@ -312,3 +319,4 @@ int pass_second(struct instruction *root)
 
     return 0;
 }
+

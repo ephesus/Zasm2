@@ -14,7 +14,8 @@
 
 #include "../config.h"
 
-void show_help(int returncode) {
+void show_help(int returncode) 
+{
     puts("(C) 2002 James Lee Rubingh");
     printf("Zasm %s\n",PACKAGE_VERSION);
     puts("zasm (switches) [infile] [outfile]");
