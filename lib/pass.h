@@ -25,7 +25,7 @@ struct tab_entry *match_mnumonic(struct tab_entry *, struct instruction *);
 void attach_label(char *, struct instruction *);
 void calculate_opcode(struct tab_entry*, struct instruction *);
 
-enum z_directive {
+enum Z_DIRECTIVE {
     Z_DB,
     Z_DW,
     Z_ORG,

@@ -31,7 +31,8 @@ int assemble(struct tab_entry *tabroot, FILE *infile)
 }
 
 /* wasn't a label, so assume it's an instruction */
-void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i) {
+void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i) 
+{
     struct tab_entry *tab_match;
 
     if (!(tab_match = match_mnumonic(tabroot, tmp_i))) {
@@ -40,12 +41,12 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i) {
          */
         if ((strcmp(tmp_i->mnumonic, ".DW") == 0) || 
                 (strcmp(tmp_i->mnumonic, ".WORD") == 0)) {
-            return Z_DB;
+
         } else if ((strcmp(tmp_i->mnumonic, ".DB") == 0) || 
                 (strcmp(tmp_i->mnumonic, ".BYTE") == 0)) {
-            return Z_DW;
+
         } else if (strcmp(tmp_i->mnumonic, ".ORG") == 0) {
-            return Z_ORG;
+
         } else {
             //set assumed PC register value
             printf("bad symbol: %s\n", tmp_i->mnumonic);
