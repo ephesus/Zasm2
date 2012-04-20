@@ -54,6 +54,15 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
         }
     } else {
         /* MNUMONIC matched */
+        if (!tmp_i->op_num) {
+            //tab_match is correct tab_entry
+            printf("opc: %s\tos: %s\thc: %s\tsize: %d\n", tab_match->mnumonic,
+                    tab_match->operands, tab_match->hex_code, tab_match->size);
+        } else {
+            printf("opc:  %s\tno: %d\n", tab_match->mnumonic, tmp_i->op_num);
+
+        }
+
     }
 }
 
@@ -149,6 +158,10 @@ struct instruction *pass_first(FILE *infile, struct tab_entry *tabroot)
     return root;
 }
 
+/* current line has first token removed (instruction) and comments
+ * removed. Now go through the rest and assume they're instructions
+ * separated with ','
+ */
 struct instruction *get_operands(struct instruction *cur) 
 {
     int cur_op_num;
@@ -157,17 +170,19 @@ struct instruction *get_operands(struct instruction *cur)
     /* check for operands */
     cur_op_num = 0;
     while ((buf = (char *) strtok(NULL, comma))) {
-        if (!cur->operands) 
-            cur->operands = (char **) malloc(sizeof( char *));
-        else 
-            cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
+        remove_whitespace(buf); //remove any tabs etc.
+        if (strlen(buf) > 0) {
+            if (!cur->operands) 
+                cur->operands = (char **) malloc(sizeof( char *));
+            else 
+                cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
 
-        remove_whitespace(buf);
-        capitalize(buf);
-        cur->operands[cur_op_num] = (char *) malloc(strlen(buf) );
-        strcpy(cur->operands[cur_op_num], buf);
+            capitalize(buf);
+            cur->operands[cur_op_num] = (char *) malloc(strlen(buf) );
+            strcpy(cur->operands[cur_op_num], buf);
 
-        cur->op_num = ++cur_op_num;
+            cur->op_num = ++cur_op_num;
+        }
     }
     cur->op_num = cur_op_num;
     return cur;
@@ -292,30 +307,31 @@ int pass_second(struct instruction *root)
     int i = 0;
 
 #ifdef DEBUG
-    instd = root;
+    /*
+       instd = root;
+    //loop through instructions
     while (instd) {
-        printf("   inst: %s  :\n", instd->mnumonic);
-        for(i = 0; i < instd->op_num; i++) 
-            printf("\t:opnd: %s\n", instd->operands[i]);
-        instd = instd->next;
+    printf("   inst: %s  :\n", instd->mnumonic);
+    for(i = 0; i < instd->op_num; i++) 
+    printf("\t:opnd: %s\n", instd->operands[i]);
+    instd = instd->next;
     }
-#endif
 
     cur = label_root;
     while (cur) {
-        instd = cur->instruction;
+    instd = cur->instruction;
 
-#ifdef DEBUG
-        //print all labels and operands
-        printf("label: %s  :\n", cur->name);
-        printf("   inst: %s  :\n", instd->mnumonic);
-        for(i = 0; i < instd->op_num; i++) 
-            printf("\t:opnd: %s\n", instd->operands[i]);
+    //print all labels and operands
+    printf("label: %s  :\n", cur->name);
+    printf("   inst: %s  :\n", instd->mnumonic);
+    for(i = 0; i < instd->op_num; i++) 
+    printf("\t:opnd: %s\n", instd->operands[i]);
 
-#endif
 
-        cur = cur->next;
+    cur = cur->next;
     }
+    */
+#endif
 
 
     return 0;
