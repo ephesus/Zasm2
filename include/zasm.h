@@ -1,6 +1,6 @@
-/* 
+/*
 
-   This is a zasm header file.   
+   This is a zasm header file.
    */
 
 #ifndef ZASM_H
@@ -12,10 +12,10 @@
 #define whitespace " \t\r\n,"
 #define comma ","
 #define tab_whitespace " \t\r\n"
-#define DEBUG 
+#define DEBUG
 #define ERR_PARSE "Couldn't parse"
 #define ERR_BADLABEL "Invalid Label"
-#define ERR_MALLOC "Out of heap memory - seriously?"
+#define ERR_MALLOC "Out of heap memory"
 
 /* put a 4-byte integer into a byte array in LSB order or MSB order */
 /* from Mark Adler's pigz source */
@@ -69,7 +69,7 @@ struct label_entry {
 extern int verbose;
 extern int tiprog;
 extern int tistring;
-extern double linenumber; 
+extern double linenumber;
 extern struct label_entry *label_root;
 extern struct label_entry *label_current;
 extern struct symbol_entry *symbol_root;
