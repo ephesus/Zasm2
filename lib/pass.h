@@ -8,7 +8,6 @@
  *  査読お願いします!
  */
 
-char *append_string(char *, const char *);
 char *calculate_query_string(const struct instruction *);
 char *remove_whitespace(char *);
 
@@ -25,6 +24,7 @@ struct instruction *pass_first(FILE *, struct tab_entry*);
 struct instruction *parse_source(FILE *, struct instruction*, struct tab_entry*);
 struct tab_entry *match_mnumonic(struct tab_entry *, struct instruction *);
 
+void append_string(char *, const char *);
 void attach_label(char *, struct instruction *);
 void calculate_opcode(struct tab_entry*, struct instruction *);
 

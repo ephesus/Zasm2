@@ -43,19 +43,16 @@ int check_for_symbol(const char *operand)
     return 0;
 }
 
-char *append_string(char *target, const char *addition)
+void append_string(char *target, const char *addition)
 {
     char *tmp;
 
     tmp = target;
-
     while (*tmp) {
         tmp++;
     }
 
     strcpy(tmp, addition);
-
-    return target;
 }
 
 /* Figure out the generic string representing the individual
@@ -72,12 +69,17 @@ char *calculate_query_string(const struct instruction *tmp_i)
     query[0] = '\0';
 
     for (i = 0; i < tmp_i->op_num; i++) {
+            if (i > 0)
+                append_string(query, ",");
+
             if (check_for_symbol(tmp_i->operands[i])) {
-                query = append_string(query, tmp_i->operands[i]);
+                append_string(query, tmp_i->operands[i]);
             } else {
                 //reduce this operand to an int or throw error.
                 //labels get reduced to addresses, expressions reduced to
                 //their values etc.
+                
+                append_string(query, tmp_i->operands[i]);
             }
     }
 
@@ -117,8 +119,10 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
             printf("opc:  %s\tno: %d\n", tab_match->mnumonic, tmp_i->op_num);
 
             query_string = calculate_query_string(tmp_i);
+            //step through tab_entry's of same mnumonic comparing query_string to tab_entry->operands
 
 
+            //printf("QUERY: %s\n", query_string);  //debug
             free(query_string);
         }
 
