@@ -9,12 +9,12 @@
  */
 
 char *append_string(char *, const char *);
-char *calculate_query_string(struct instruction *);
+char *calculate_query_string(const struct instruction *);
 char *remove_whitespace(char *);
 
 int apply_table(struct instruction *, struct tab_entry*);
 int assemble(struct tab_entry *, FILE *);
-int check_for_symbol(char *);
+int check_for_symbol(const char *);
 int pass_second(struct instruction *);
 int validate_label(char *);
 
