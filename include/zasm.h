@@ -8,6 +8,7 @@
 
 #define INSTRUCTION_BUFFER_SIZE 1000
 #define TABFILE_BUFFER_SIZE 500
+#define MNUMONIC_TXT_LENGTH 6
 #define whitespace " \t\r\n,"
 #define comma ","
 #define tab_whitespace " \t\r\n"
@@ -33,7 +34,7 @@ struct instruction {
 } __attribute__((__packed__));
 
 struct tab_entry {
-    char mnumonic[6];
+    char mnumonic[MNUMONIC_TXT_LENGTH];
     char operands[10];
     char hex_code[10];
     int opcode;

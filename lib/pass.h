@@ -23,6 +23,7 @@ struct label_entry *new_label();
 struct instruction *pass_first(FILE *, struct tab_entry*);
 struct instruction *parse_source(FILE *, struct instruction*, struct tab_entry*);
 struct tab_entry *match_mnumonic(struct tab_entry *, struct instruction *);
+struct tab_entry *match_operands_to_mnumonic(struct tab_entry *, const char *);
 
 void append_string(char *, const char *);
 void attach_label(char *, struct instruction *);
