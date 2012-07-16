@@ -33,7 +33,7 @@ int assemble(struct tab_entry *tabroot, FILE *infile)
 int check_for_symbol(const char *operand)
 {
     int i;
-    
+
     for (i=0; i<NUM_SYMBOLS_TO_CHECK; i++) {
         if (strcmp(REGISTERS[i], operand) == 0) {
             return 1;
@@ -69,18 +69,18 @@ char *calculate_query_string(const struct instruction *tmp_i)
     query[0] = '\0';
 
     for (i = 0; i < tmp_i->op_num; i++) {
-            if (i > 0)
-                append_string(query, ",");
+        if (i > 0)
+            append_string(query, ",");
 
-            if (check_for_symbol(tmp_i->operands[i])) {
-                append_string(query, tmp_i->operands[i]);
-            } else {
-                //reduce this operand to an int or throw error.
-                //labels get reduced to addresses, expressions reduced to
-                //their values etc.
-                
-                append_string(query, tmp_i->operands[i]);
-            }
+        if (check_for_symbol(tmp_i->operands[i])) {
+            append_string(query, tmp_i->operands[i]);
+        } else {
+            //reduce this operand to an int or throw error.
+            //labels get reduced to addresses, expressions reduced to
+            //their values etc.
+
+            append_string(query, tmp_i->operands[i]);
+        }
     }
 
     return query;
@@ -143,21 +143,31 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
             query_string = calculate_query_string(tmp_i);
             //step through tab_entry's of same mnumonic comparing query_string to tab_entry->operands
 
-            if (tab_temp = match_operands_to_mnumonic(tab_match, query_string)) {
-                tab_match = tab_temp;
-
-                printf("*opc: %s \tos: %s\thc: %s\tsize: %d\n", tab_match->mnumonic,
-                        tab_match->operands, tab_match->hex_code, tab_match->size);
-            } else {
-                //check if one operand is value or label
-                printf("***query_string: %s\n", query_string);
-            }
+            tab_match = look_with_query_string(query_string, tab_match);
 
             //printf("QUERY: %s\n", query_string);  //debug
             free(query_string);
         }
 
     }
+}
+
+struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *tab_match) 
+{
+    struct tab_entry *tab_temp;
+
+    if (tab_temp = match_operands_to_mnumonic(tab_match, query_string)) {
+        tab_match = tab_temp;
+
+        printf("*opc: %s \tos: %s\thc: %s\tsize: %d\n", tab_match->mnumonic,
+                tab_match->operands, tab_match->hex_code, tab_match->size);
+
+    } else {
+        //check if one operand is value or label
+        printf("***query_string: %s\n", query_string);
+    }
+
+    return tab_match;
 }
 
 struct tab_entry *match_mnumonic(struct tab_entry *tabroot, struct instruction *instruction) 
