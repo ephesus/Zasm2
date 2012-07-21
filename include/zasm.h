@@ -30,6 +30,7 @@ struct instruction {
     unsigned int opcode;
     unsigned short int op_num;
     unsigned short int assembled;
+    unsigned short int haslabel;
     struct instruction *next, *previous;
 } __attribute__((__packed__));
 
@@ -72,6 +73,9 @@ struct tab_entry *new_tab_entry(char *);
 
 /* pass.c */
 extern int pass(struct instruction *, struct tab_entry *, FILE * infile);
+
+/* shunt.c */
+extern int shunt(char *);
 
 /* help.c */
 extern void show_help(int ) __attribute__((__noreturn__));

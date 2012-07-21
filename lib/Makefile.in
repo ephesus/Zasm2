@@ -2,9 +2,11 @@ OPTS =
 
 all:
 	gcc $(CFLAGS) $(OPTS) -c pass.c -o pass.o	
+	gcc $(CFLAGS) $(OPTS) -c shunt.c -o shunt.o	
 
 clean:
 	rm -f pass.o
+	rm -f shunt.o
 
 distclean: clean
 	rm -f Makefile
