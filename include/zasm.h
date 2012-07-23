@@ -31,6 +31,7 @@ struct instruction {
     unsigned short int op_num;
     unsigned short int assembled;
     unsigned short int haslabel;
+    struct tab_entry *matched_tab;
     struct instruction *next, *previous;
 } __attribute__((__packed__));
 

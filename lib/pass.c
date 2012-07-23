@@ -107,18 +107,25 @@ struct tab_entry *match_operands_to_mnumonic(struct tab_entry *tab_match, const 
 }
 
 /* wasn't a label, so assume it's an instruction */
-
-/* THIS FUNCTION IS A DISASTER AREA, NEEDS REFACTORING */
 void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i) 
 {
     struct tab_entry *tab_match;
     struct tab_entry *tab_temp;
     char *query_string;
 
-    if (!(tab_match = match_mnumonic(tabroot, tmp_i))) {
-        /* wasn't in TASM80.TAB, preprocessor directive?
-         * going to have to clean this up later
-         */
+    if (tab_match = match_mnumonic(tabroot, tmp_i)) {
+        //mnumonic is found in tab file
+        query_string = calculate_query_string(tmp_i);
+
+        //only if there are operands try to match them
+        if (tmp_i->op_num)
+            tab_match = look_with_query_string(query_string, tab_match);
+
+        found_correct_tab_entry(tmp_i, tab_match);
+
+        free(query_string);
+    } else {
+        // wasn't in tab file, preprocessor directive?
         if ((strcmp(tmp_i->mnumonic, ".DW") == 0) || 
                 (strcmp(tmp_i->mnumonic, ".WORD") == 0)) {
 
@@ -126,29 +133,13 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
                 (strcmp(tmp_i->mnumonic, ".BYTE") == 0)) {
 
         } else if (strcmp(tmp_i->mnumonic, ".ORG") == 0) {
+            //set assumed PC register value
 
         } else {
-            //set assumed PC register value
+            //reached symbol not in table file, also not understood by zasm2
             printf("bad symbol: %s\n", tmp_i->mnumonic);
             do_error_msg(ERR_PARSE);
         }
-    } else {
-        /* MNUMONIC already matched */
-        if (!tmp_i->op_num) {
-            //tab_match is correct tab_entry
-            printf("opc: %s\tos: %s\thc: %s\tsize: %d\n", tab_match->mnumonic,
-                    tab_match->operands, tab_match->hex_code, tab_match->size);
-        } else {
-
-            query_string = calculate_query_string(tmp_i);
-            //step through tab_entry's of same mnumonic comparing query_string to tab_entry->operands
-
-            tab_match = look_with_query_string(query_string, tab_match);
-
-            //printf("QUERY: %s\n", query_string);  //debug
-            free(query_string);
-        }
-
     }
 }
 
@@ -158,9 +149,6 @@ struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *t
 
     if (tab_temp = match_operands_to_mnumonic(tab_match, query_string)) {
         tab_match = tab_temp;
-
-        printf("*opc: %s \tos: %s\thc: %s\tsize: %d\n", tab_match->mnumonic,
-                tab_match->operands, tab_match->hex_code, tab_match->size);
 
     } else {
         //check if one operand is value or label
@@ -186,6 +174,11 @@ struct tab_entry *match_mnumonic(struct tab_entry *tabroot, struct instruction *
     return NULL;
 }
 
+void found_correct_tab_entry(struct instruction *tmp_i, struct tab_entry *match)
+{
+    tmp_i->matched_tab = match;
+}
+
 struct label_entry *new_label() 
 {
     struct label_entry *tmp;
@@ -206,10 +199,8 @@ struct instruction *new_instruction()
     if (!(cur = (struct instruction *) malloc(sizeof(struct instruction)))) {
         do_error_msg(ERR_MALLOC);
     }
-    cur->next = NULL;
-    cur->previous = NULL;
-    cur->operands = NULL;
-    cur->assembled = 0;
+
+    memset(cur, 0, sizeof(struct instruction));
 
     return cur;
 }
