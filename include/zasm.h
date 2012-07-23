@@ -76,6 +76,7 @@ extern int pass(struct instruction *, struct tab_entry *, FILE * infile);
 
 /* shunt.c */
 extern int shunt(char *);
+extern int shunt_error;
 
 /* help.c */
 extern void show_help(int ) __attribute__((__noreturn__));
