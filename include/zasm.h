@@ -8,7 +8,7 @@
 
 #define INSTRUCTION_BUFFER_SIZE 1000
 #define TABFILE_BUFFER_SIZE 500
-#define MNUMONIC_TXT_LENGTH 6
+#define MNUMONIC_TXT_LENGTH 16
 #define whitespace " \t\r\n,"
 #define comma ","
 #define tab_whitespace " \t\r\n"
@@ -26,7 +26,7 @@
 typedef unsigned char byte;
 
 struct instruction {
-    char mnumonic[6];
+    char mnumonic[MNUMONIC_TXT_LENGTH];
     char **operands;
     unsigned int opcode;
     unsigned short int op_num;
