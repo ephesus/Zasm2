@@ -380,7 +380,7 @@ void attach_label(char *ptr, struct instruction *inst)
     if (label_root == NULL)
         label_root = tmp;
     else
-        label_current->next = tmp;
+        label_current->next = tmp;  //label_current is global extern'd
 
     label_current = tmp;
     tmp->name = (char *)malloc(strlen(ptr) * sizeof(char));
@@ -411,28 +411,28 @@ int pass_second(struct instruction *root)
     int i = 0;
 
 #ifdef DEBUG
-       instd = root;
+    instd = root;
     //loop through instructions
     while (instd) {
-    printf("   inst: %s  :\n", instd->mnumonic);
-    printf("    matched_tab: %p  :\n",  instd->matched_tab);
-    for(i = 0; i < instd->op_num; i++) 
-    printf("\t:opnd: %s\n", instd->operands[i]);
-    instd = instd->next;
+        printf("   inst: %s  :\n", instd->mnumonic);
+        printf("    matched_tab: %p  :\n",  instd->matched_tab);
+        for(i = 0; i < instd->op_num; i++) 
+            printf("\t:opnd: %s\n", instd->operands[i]);
+        instd = instd->next;
     }
 
     cur = label_root;
     while (cur) {
-    instd = cur->instruction;
+        instd = cur->instruction;
 
-    //print all labels and operands
-    printf("label: %s  :\n", cur->name);
-    printf("   inst: %s  :\n", instd->mnumonic);
-    for(i = 0; i < instd->op_num; i++) 
-    printf("\t:opnd: %s\n", instd->operands[i]);
+        //print all labels and operands
+        printf("label: %s  :\n", cur->name);
+        printf("   inst: %s  :\n", instd->mnumonic);
+        for(i = 0; i < instd->op_num; i++) 
+            printf("\t:opnd: %s\n", instd->operands[i]);
 
 
-    cur = cur->next;
+        cur = cur->next;
     }
 #endif
 
