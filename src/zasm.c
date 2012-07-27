@@ -23,6 +23,7 @@ int verbose = 0;
 int tistring = 0;
 int tiprog = 0;
 double linenumber = 0;
+unsigned int current_address = 0;
 struct label_entry* label_root;
 struct label_entry *label_latest_unset;
 struct label_entry *label_current;

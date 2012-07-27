@@ -52,8 +52,23 @@ void append_string(char *target, const char *addition)
         tmp++;
     }
 
-    //this is a potential buffer overflow
+    //this is a potential buffer overflow but, oh well
     strcpy(tmp, addition);
+}
+
+char *capitalize(char *buf) 
+{
+    char *tmp;
+
+    tmp = buf;
+
+    while (*tmp) {
+        if (isalpha(*tmp)) 
+            *tmp = toupper(*tmp);
+        tmp++;
+    }
+
+    return buf;
 }
 
 /* Figure out the generic string representing the individual
@@ -146,11 +161,21 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
             //set assumed PC register value
 
         } else {
-            //reached symbol not in table file, also not understood by zasm2
-            printf("bad symbol: %s\n", tmp_i->mnumonic);
-            do_error_msg(ERR_PARSE);
+            if (add_symbol(tmp_i)) {
+                //reached word not in table file, also not understood by zasm2
+                printf("bad symbol: %s\n", tmp_i->mnumonic);
+                do_error_msg(ERR_PARSE);
+            }
         }
     }
+}
+
+int add_symbol(struct instruction *tmp_i)
+{
+    if ((tmp_i->operands[0][0] == '=')) {
+        printf("symbol found\n");
+    }
+    return 0;
 }
 
 struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *tab_match) 
@@ -207,21 +232,6 @@ struct instruction *new_instruction()
     memset(cur, 0, sizeof(struct instruction));
 
     return cur;
-}
-
-char *capitalize(char *buf) 
-{
-    char *tmp;
-
-    tmp = buf;
-
-    while (*tmp) {
-        if (isalpha(*tmp)) 
-            *tmp = toupper(*tmp);
-        tmp++;
-    }
-
-    return buf;
 }
 
 char *remove_whitespace(char * buf) 
@@ -365,7 +375,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
         }
     }
 
-    /* return either the root or the tail */
+    /* return either the head or the tail */
     return initial_root == NULL ? inst_root : cur;
 }
 
@@ -411,28 +421,30 @@ int pass_second(struct instruction *root)
     int i = 0;
 
 #ifdef DEBUG
-    instd = root;
+       instd = root;
     //loop through instructions
     while (instd) {
-        printf("   inst: %s  :\n", instd->mnumonic);
-        printf("    matched_tab: %p  :\n",  instd->matched_tab);
-        for(i = 0; i < instd->op_num; i++) 
-            printf("\t:opnd: %s\n", instd->operands[i]);
-        instd = instd->next;
+    if (instd->haslabel) {
+    printf("   inst: %s  :\n", instd->mnumonic);
+    printf("    matched_tab: %p  :\n",  instd->matched_tab);
+    for(i = 0; i < instd->op_num; i++) 
+    printf("\t:opnd: %s\n", instd->operands[i]);
+    }
+    instd = instd->next;
     }
 
     cur = label_root;
     while (cur) {
-        instd = cur->instruction;
+    instd = cur->instruction;
 
-        //print all labels and operands
-        printf("label: %s  :\n", cur->name);
-        printf("   inst: %s  :\n", instd->mnumonic);
-        for(i = 0; i < instd->op_num; i++) 
-            printf("\t:opnd: %s\n", instd->operands[i]);
+    //print all labels and operands
+    printf("label: %s  :\n", cur->name);
+    printf("   inst: %s  :\n", instd->mnumonic);
+    for(i = 0; i < instd->op_num; i++) 
+    printf("\t:opnd: %s\n", instd->operands[i]);
 
 
-        cur = cur->next;
+    cur = cur->next;
     }
 #endif
 

@@ -11,6 +11,7 @@
 char *calculate_query_string(struct instruction *);
 char *remove_whitespace(char *);
 
+int add_symbol(struct instruction *);
 int apply_table(struct instruction *, struct tab_entry*);
 int assemble(struct tab_entry *, FILE *);
 int check_for_symbol(const char *);

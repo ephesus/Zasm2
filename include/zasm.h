@@ -29,6 +29,7 @@ struct instruction {
     char mnumonic[MNUMONIC_TXT_LENGTH];
     char **operands;
     unsigned int opcode;
+    unsigned int address;
     unsigned short int op_num;
     unsigned short int assembled;
     unsigned short int haslabel;
@@ -75,6 +76,7 @@ struct tab_entry *new_tab_entry(char *);
 
 /* pass.c */
 extern int pass(struct instruction *, struct tab_entry *, FILE * infile);
+extern unsigned int current_address;
 
 /* shunt.c */
 extern int shunt(char *);
