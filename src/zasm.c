@@ -28,19 +28,6 @@ struct label_entry* label_root;
 struct label_entry *label_latest_unset;
 struct label_entry *label_current;
 
-void strip_comment(char *ptr)
-{
-  /*! replace any ; or \n with a terminating null */
-  while (*ptr != '\0') {
-    if ((*ptr == ';')||(*ptr == '\n')||(*ptr == ':')) {
-      *ptr = '\0';
-      break;
-    }
-
-    ptr++;
-  }
-}
-
 void do_error() 
 {
   printf("Error: line %f - Closing\n", linenumber);
