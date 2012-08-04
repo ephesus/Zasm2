@@ -18,15 +18,15 @@
 
 void strip_comment(char *ptr)
 {
-  /*! replace any ; or \n with a terminating null */
-  while (*ptr != '\0') {
-    if ((*ptr == ';')||(*ptr == '\n')||(*ptr == ':')) {
-      *ptr = '\0';
-      break;
-    }
+    /*! replace any ; or \n with a terminating null */
+    while (*ptr != '\0') {
+        if ((*ptr == ';')||(*ptr == '\n')||(*ptr == ':')) {
+            *ptr = '\0';
+            break;
+        }
 
-    ptr++;
-  }
+        ptr++;
+    }
 }
 
 /* starting new file */
@@ -434,30 +434,30 @@ int pass_second(struct instruction *root)
     int i = 0;
 
 #ifdef DEBUG
-       instd = root;
+    instd = root;
     //loop through instructions
     while (instd) {
-    if (instd->haslabel) {
-    printf("   inst: %s  :\n", instd->mnumonic);
-    printf("    matched_tab: %p  :\n",  instd->matched_tab);
-    for(i = 0; i < instd->op_num; i++) 
-    printf("\t:opnd: %s\n", instd->operands[i]);
-    }
-    instd = instd->next;
+        if (instd->haslabel) {
+            printf("   inst: %s  :\n", instd->mnumonic);
+            printf("    matched_tab: %p  :\n",  instd->matched_tab);
+            for(i = 0; i < instd->op_num; i++) 
+                printf("\t:opnd: %s\n", instd->operands[i]);
+        }
+        instd = instd->next;
     }
 
     cur = label_root;
     while (cur) {
-    instd = cur->instruction;
+        instd = cur->instruction;
 
-    //print all labels and operands
-    printf("label: %s  :\n", cur->name);
-    printf("   inst: %s  :\n", instd->mnumonic);
-    for(i = 0; i < instd->op_num; i++) 
-    printf("\t:opnd: %s\n", instd->operands[i]);
+        //print all labels and operands
+        printf("label: %s  :\n", cur->name);
+        printf("   inst: %s  :\n", instd->mnumonic);
+        for(i = 0; i < instd->op_num; i++) 
+            printf("\t:opnd: %s\n", instd->operands[i]);
 
 
-    cur = cur->next;
+        cur = cur->next;
     }
 #endif
 
