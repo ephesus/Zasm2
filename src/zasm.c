@@ -72,12 +72,14 @@ struct tab_entry *read_table(FILE *tabfile)
   char hexbuf[TABFILE_BUFFER_SIZE];
   char *buf, *endptr;
 
-  while (fgets(buffer, TABFILE_BUFFER_SIZE, tabfile)) {
+  while (fgets(buffer, TABFILE_BUFFER_SIZE, tabfile)) 
+  {
     if (buf = (char *) strtok(buffer, tab_whitespace)) {
       temp = new_tab_entry(buf);
       strcpy(hexbuf,"0x");
 
-      while ((buf = (char *) strtok(NULL, tab_whitespace))) {
+      while ((buf = (char *) strtok(NULL, tab_whitespace))) 
+      {
         if (*temp->operands == 0) {
           strcpy(temp->operands, buf);
         } else if (*temp->hex_code == 0) {
@@ -117,7 +119,8 @@ int main(int ac, char **av)
   struct instruction *root=NULL;
   struct tab_entry *tab_root=NULL;
 
-  while (1) {
+  while (1) 
+  {
     int option_index=0;
     static struct option long_options[] = {
       {"version", 0, 0, 'V'},

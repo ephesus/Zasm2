@@ -19,7 +19,8 @@
 void strip_comment(char *ptr)
 {
     /*! replace any ; or \n with a terminating null */
-    while (*ptr != '\0') {
+    while (*ptr != '\0')
+    {
         if ((*ptr == ';')||(*ptr == '\n')||(*ptr == ':')) {
             *ptr = '\0';
             break;
@@ -47,7 +48,8 @@ int check_for_symbol(const char *operand)
 {
     int i;
 
-    for (i=0; i<NUM_SYMBOLS_TO_CHECK; i++) {
+    for (i=0; i<NUM_SYMBOLS_TO_CHECK; i++) 
+    {
         if (strcmp(REGISTERS[i], operand) == 0) {
             return 1;
         }
@@ -61,7 +63,8 @@ void append_string(char *target, const char *addition)
     char *tmp;
 
     tmp = target;
-    while (*tmp) {
+    while (*tmp) 
+    {
         tmp++;
     }
 
@@ -75,7 +78,8 @@ char *capitalize(char *buf)
 
     tmp = buf;
 
-    while (*tmp) {
+    while (*tmp) 
+    {
         if (isalpha(*tmp)) 
             *tmp = toupper(*tmp);
         tmp++;
@@ -97,7 +101,8 @@ char *calculate_query_string(struct instruction *tmp_i)
     query = (char *) malloc(INSTRUCTION_BUFFER_SIZE); 
     query[0] = '\0';
 
-    for (i = 0; i < tmp_i->op_num; i++) {
+    for (i = 0; i < tmp_i->op_num; i++) 
+    {
         if (i > 0)
             append_string(query, ",");
 
@@ -130,7 +135,8 @@ struct tab_entry *match_operands_to_mnumonic(struct tab_entry *tab_match, const 
     tab_tmp = tab_match;
 
     //loop until we get to the next mnumonic or the end
-    while ((strcmp(current_mnumonic, tab_tmp->mnumonic) == 0) && (tab_tmp->next)) {
+    while ((strcmp(current_mnumonic, tab_tmp->mnumonic) == 0) && (tab_tmp->next)) 
+    {
         if (strcmp(tab_tmp->operands, query_string) == 0) {
             //return a matched instruction
             return tab_tmp;
@@ -226,7 +232,8 @@ struct tab_entry *match_mnumonic(struct tab_entry *tabroot, struct instruction *
 
     tmp_tab = tabroot;
 
-    while (tmp_tab) {
+    while (tmp_tab) 
+    {
         if (strcmp(instruction->mnumonic, tmp_tab->mnumonic) == 0) 
             return tmp_tab;
 
@@ -282,7 +289,8 @@ char *remove_whitespace(char * buf)
     char tmp[INSTRUCTION_BUFFER_SIZE];
 
     i = t = 0;
-    while (buf[i]) {
+    while (buf[i]) 
+    {
         if (!isblank(buf[i])) 
             tmp[t++] = buf[i];
 
@@ -320,7 +328,8 @@ struct instruction *get_operands(struct instruction *cur)
 
     /* check for operands */
     cur_op_num = 0;
-    while ((buf = (char *) strtok(NULL, comma))) {
+    while ((buf = (char *) strtok(NULL, comma))) 
+    {
         remove_whitespace(buf); //remove any tabs etc.
         if (strlen(buf) > 0) {
             if (!cur->operands) 
@@ -363,7 +372,8 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
     inst_root = initial_root;
     buf = b;
 
-    while (fgets(buffer, INSTRUCTION_BUFFER_SIZE, infile)) {
+    while (fgets(buffer, INSTRUCTION_BUFFER_SIZE, infile)) 
+    {
         strip_comment(buffer);
         linenumber++;
 
@@ -442,7 +452,8 @@ void attach_label(char *ptr, struct instruction *inst)
 int validate_label(char *ptr) 
 {
     int valid = 1;
-    while (*ptr != '\0') {
+    while (*ptr != '\0') 
+    {
         if (!(isalnum(*ptr) || (*ptr == '-') || (*ptr == '_') || (*ptr == '.') || (*ptr == '@')))
             valid = 0;
         ptr++;
@@ -463,7 +474,8 @@ int pass_second(struct instruction *root)
 #ifdef DEBUG
     instd = root;
     //loop through instructions
-    while (instd) {
+    while (instd) 
+    {
         if (instd->not_reduced) {
             printf("   inst: %s  :\n", instd->mnumonic);
             printf("    matched_tab: %p  :\n",  instd->matched_tab);
@@ -474,7 +486,8 @@ int pass_second(struct instruction *root)
     }
 
     cur = label_root;
-    while (cur) {
+    while (cur) 
+    {
         instd = cur->instruction;
 
         //print all labels and operands
@@ -490,7 +503,8 @@ int pass_second(struct instruction *root)
 
     if (symbol_root) {
         cur_sym = symbol_root;
-        while (cur_sym) {
+        while (cur_sym) 
+        {
             printf("symbol: %s %s\n", cur_sym->name, cur_sym->instruction->operands[0]);
             cur_sym = cur_sym->next;
         }
