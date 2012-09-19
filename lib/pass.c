@@ -16,31 +16,6 @@
 #include "ctype.h"
 #include "pass.h"
 
-/* Functions to write unaligned littleendian data */
-static inline void
-write_le16(uint8_t *ptr, uint16_t v)
-{
-#if defined(__i386__) || defined(__x86_64__)
-  *(uint16_t *)ptr = v;
-#else
-  ptr[0] = (v & 0xff);
-  ptr[1] = (v >> 8) & 0xff;
-#endif
-}
-
-static inline void
-write_le32(uint8_t *ptr, uint32_t v)
-{
-#if defined(__i386__) || defined(__x86_64__)
-  *(uint32_t *)ptr = v;
-#else
-  ptr[0] = (v & 0xff);
-  ptr[1] = (v >> 8) & 0xff;
-  ptr[2] = (v >> 16) & 0xff;
-  ptr[3] = (v >> 24) & 0xff;
-#endif
-}
-
 void strip_comment(char *ptr)
 {
     /*! replace any ; or \n with a terminating null */
