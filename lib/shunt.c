@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Retrieved from: http://en.literateprograms.org/Shunting_yard_algorithm_(C)?oldid=12454
 
- ** edited by James Rubingh for zasm2 (
+ ** edited by James Rubingh for zasm2 (git:9fef825b)
  */
 
 #include<stdlib.h>
