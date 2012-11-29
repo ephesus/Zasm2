@@ -42,7 +42,6 @@ enum Z_DIRECTIVE {
     Z_END
 };
 
-#define NUM_SYMBOLS_TO_CHECK 26
 const char *REGISTERS[] = {
     //registers
     "A",
@@ -76,4 +75,4 @@ const char *REGISTERS[] = {
     "PO",
 };
 
-
+#define NUM_SYMBOLS_TO_CHECK (sizeof(REGISTERS) / sizeof(REGISTERS[0]))
