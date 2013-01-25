@@ -381,10 +381,6 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
             cur = new_instruction();
 
         if (isblank(buffer[0]) || (buffer[0] == '\n') || (buffer[0] == '#') || (buffer[0] == '.')) {
-            /** if the first char is blank, treat as an instruction
-             * or a blank line.
-             */
-
             if (buffer[0] == '#') //make preprocessor directives .<directive>
                 buffer[0] = '.';
 
@@ -392,7 +388,6 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
             if ((buf = (char *) strtok(buffer, whitespace))) {
                 instructions++;
 
-                /* if first element, point root to it */
                 if (!inst_root)
                     inst_root = cur;
 
@@ -403,7 +398,6 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
 
                 strncpy(cur->mnumonic, buf, MNUMONIC_TXT_LENGTH);
 
-                /* attach any operands we find */
                 get_operands(cur);
             }
 
