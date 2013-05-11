@@ -1,8 +1,9 @@
 OPTS = 
+CC = clang # or gcc
 
 all:
-	gcc $(CFLAGS) $(OPTS) -c pass.c -o pass.o	
-	gcc $(CFLAGS) $(OPTS) -c shunt.c -o shunt.o	
+	$(CC) $(CFLAGS) $(OPTS) -c pass.c -o pass.o	
+	$(CC) $(CFLAGS) $(OPTS) -c shunt.c -o shunt.o	
 
 clean:
 	rm -f pass.o
