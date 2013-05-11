@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "../include/zasm.h"
 #include "../config.h"
 #include "pass.h"
@@ -162,7 +163,7 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
     char *query_string;
 
 
-    if (tab_match = match_mnumonic(tabroot, tmp_i)) {
+    if ((tab_match = match_mnumonic(tabroot, tmp_i))) {
         query_string = (char *) malloc(INSTRUCTION_BUFFER_SIZE);
         query_string[0] = '\0';
         //mnumonic is found in tab file
@@ -294,7 +295,7 @@ struct instruction *new_instruction()
     return cur;
 }
 
-char *remove_whitespace(char * buf)
+void remove_whitespace(char * buf)
 {
     int i, t;
     char tmp[INSTRUCTION_BUFFER_SIZE];

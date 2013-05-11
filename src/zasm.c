@@ -14,6 +14,7 @@
 #include <getopt.h>
 #include <string.h>
 #include <errno.h>
+#include <ctype.h>
 #include "../config.h"
 
 #include "../include/zasm.h"
@@ -74,7 +75,7 @@ struct tab_entry *read_table(FILE *tabfile)
 
     while (fgets(buffer, TABFILE_BUFFER_SIZE, tabfile))
     {
-        if (buf = (char *) strtok(buffer, tab_whitespace)) {
+        if ((buf = (char *) strtok(buffer, tab_whitespace))) {
             temp = new_tab_entry(buf);
             strcpy(hexbuf,"0x");
 
@@ -163,8 +164,8 @@ int main(int ac, char **av)
 
     /* check if tabflie is open, if not use default */
     if (!tabfile){
-        if (tabfile=fopen("./TASM80.TAB","r")){
-            if (verbose)
+        if ((tabfile=fopen("./TASM80.TAB","r"))){
+            if ((verbose))
                 puts("using default tab file TASM80.TAB");
         } else {
             puts("Can't open TASM80.TAB file");
