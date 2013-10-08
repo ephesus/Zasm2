@@ -192,6 +192,10 @@ int main(int ac, char **av)
 
     assemble(tab_root, infile);
 
+    if (write_to_file(root)) {
+        printf("error\n");
+    }
+
     return 0;
 }
 

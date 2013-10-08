@@ -9,6 +9,7 @@
  */
 
 int assemble(struct tab_entry *, FILE *);
+int write_to_file(struct instruction *);
 
 static char *calculate_query_string(struct instruction *);
 static char *remove_whitespace(char *);
