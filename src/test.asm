@@ -1,7 +1,7 @@
 ;test.asm
 
- _textShadow = $9f00
- origin = _textShadow
+_textShadow = $9f00
+origin = _textShadow
 
 .org origin
 

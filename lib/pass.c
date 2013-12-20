@@ -56,11 +56,11 @@ int write_to_file(struct instruction * root)
     return 0;
 }
 
-int check_for_symbol(const char *operand)
+int check_for_register(const char *operand)
 {
     int i;
 
-    for (i=0; i<NUM_SYMBOLS_TO_CHECK; i++)
+    for (i=0; i<NUM_REGISTERS_TO_CHECK; i++)
     {
         if (strcmp(REGISTERS[i], operand) == 0) {
             return 1;
@@ -114,10 +114,10 @@ char *calculate_query_string(struct instruction *tmp_i, char *query)
         if (i > 0)
             append_string(query, ",");
 
-        if (check_for_symbol(tmp_i->operands[i])) {
+        if (check_for_register(tmp_i->operands[i])) {
             append_string(query, tmp_i->operands[i]);
         } else {
-            //if first char is alphanumeric, it's not a register
+            //already know it's not a register, if alphanum its a label/var
             if (isalpha(tmp_i->operands[i][0])) {
                 tmp_i->not_reduced =1;
                 append_string(query, "*");
@@ -167,7 +167,7 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
         query_string = (char *) malloc(INSTRUCTION_BUFFER_SIZE);
         query_string[0] = '\0';
         //mnumonic is found in tab file
-        calculate_query_string(tmp_i, query_string);
+        query_string = calculate_query_string(tmp_i, query_string);
 
         //only if there are operands try to match them
         if (tmp_i->op_num)
@@ -206,7 +206,7 @@ int add_symbol(struct instruction *tmp_i)
     struct symbol_entry *cur;
 
     if (tmp_i->operands && (tmp_i->operands[0][0] == '=')) {
-        if (validate_label(tmp_i->mnumonic)) {
+        if (validate_symbol(tmp_i->mnumonic)) {
 
             cur = new_symbol();
             cur->name = tmp_i->mnumonic;
@@ -215,11 +215,10 @@ int add_symbol(struct instruction *tmp_i)
             //if first symbol, set it to root
             if (!symbol_root) {
                 symbol_root = cur;
-                symbol_current = cur;
             } else {
                 symbol_current->next = cur;
-                symbol_current = cur;
             }
+                symbol_current = cur;
             return 0;
         }
     }
@@ -361,14 +360,14 @@ struct instruction *get_operands(struct instruction *cur)
 }
 
 /** Parse text file and create
- * tree elements for each instruction
- * appends instructions to the end of the tree it gets
+ * list elements for each instruction
+ * appends instructions to the end of the list it gets
  * so that you can call this more than once, to include
  * more than one file
  * if you call it passing a root that is null, it will return
- * the beginning of the tree
+ * the beginning of the list
  * if you pass it something other than null, it returns a pointer
- * to the last link of the tree
+ * to the last link of the list
  */
 struct instruction *parse_source(FILE *infile, struct instruction* initial_root, struct tab_entry *tabroot)
 {
@@ -421,10 +420,27 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
         } else {
             /* see if it's a valid label */
             if (strlen(buffer) > 0) {
-                if (validate_label(buffer))
+              if ((buf = (char *) strtok(buffer, whitespace))) {
+                  instructions++;
+
+                  if (!inst_root)
+                      inst_root = cur;
+
+                  if (cur_old)
+                      cur_old->next = cur;
+
+                  capitalize(buf);
+
+                  strncpy(cur->mnumonic, buf, MNUMONIC_TXT_LENGTH);
+
+                  get_operands(cur);
+              }
+              // buffer holds untokenized string with charcter at *[0]
+                if (validate_label(buffer)) {
                     attach_label(buffer, cur);
-                else
+                } else {
                     do_error_msg(ERR_BADLABEL);
+                }
 
             }
         }
@@ -452,11 +468,33 @@ void attach_label(char *ptr, struct instruction *inst)
     strcpy(tmp->name, ptr);
 }
 
-/* make sure that the label is a valid label with ascii chars
- * if it's not valid, return a false
- * */
 int validate_label(char *ptr)
 {
+    int valid = 1;
+    int tokens = 0;
+    char *buf;
+
+        /** split line, get instruction and operands */
+        if ((buf = (char *) strtok(ptr, whitespace))) {
+            tokens++;
+            capitalize(buf);
+            if (!validate_symbol(buf))
+                valid = 0;
+
+            if (tokens == 2 && (strncmp(buf, "=", 1) == 0))
+                //valid = 0, so return valid = 1
+                return !valid;
+
+        }
+    return valid;
+}
+
+/* make sure that the "symbol" (text) is a valid label with ascii chars
+ * if it's not valid, return a false
+ * */
+int validate_symbol(char *ptr)
+{
+  //check for valid chars in normal labels
     int valid = 1;
     while (*ptr != '\0')
     {
@@ -477,8 +515,13 @@ int pass_second(struct instruction *root)
     struct instruction *instd = NULL;
     int i = 0;
 
+/* i.not_reduced set are instructions with labels in the operands
+ * i.matched_tab == NULL are .DB, etc., non-instruction instructions
+ */
+
 #ifdef DEBUG
     instd = root;
+    printf("not_reduced\n");
     //loop through instructions
     while (instd)
     {
@@ -491,6 +534,21 @@ int pass_second(struct instruction *root)
         instd = instd->next;
     }
 
+    instd = root;
+    printf("no matched_tab\n");
+    //loop through instructions
+    while (instd)
+    {
+        if (instd->matched_tab == NULL) {
+            printf("   inst: %s  :\n", instd->mnumonic);
+            printf("    matched_tab: %p  :\n",  instd->matched_tab);
+            for(i = 0; i < instd->op_num; i++)
+                printf("\t:opnd: %s\n", instd->operands[i]);
+        }
+        instd = instd->next;
+    }
+
+    printf("Labels\n");
     cur = label_root;
     while (cur)
     {

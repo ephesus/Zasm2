@@ -15,6 +15,7 @@ static int apply_table(struct instruction *, struct tab_entry*);
 static int check_for_symbol(const char *);
 static int pass_second(struct instruction *);
 static int validate_label(char *);
+static int validate_symbol(char *);
 
 static struct instruction *get_operands(struct instruction *);
 static struct instruction *new_instruction();
@@ -72,4 +73,4 @@ const char *REGISTERS[] = {
     "PO",
 };
 
-#define NUM_SYMBOLS_TO_CHECK (sizeof(REGISTERS) / sizeof(REGISTERS[0]))
+#define NUM_REGISTERS_TO_CHECK (sizeof(REGISTERS) / sizeof(REGISTERS[0]))
