@@ -437,7 +437,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
               }
               // buffer holds untokenized string with charcter at *[0]
                 if (validate_label(buffer)) {
-                    attach_label(buffer, cur);
+                    add_label(buffer, cur);
                 } else {
                     do_error_msg(ERR_BADLABEL);
                 }
@@ -451,7 +451,7 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
 }
 
 /*  add a label_entry to the big list */
-void attach_label(char *ptr, struct instruction *inst)
+void add_label(char *ptr, struct instruction *inst)
 {
     struct label_entry *tmp;
 
