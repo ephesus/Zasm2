@@ -134,7 +134,7 @@ char *calculate_query_string(struct instruction *tmp_i, char *query)
     return query;
 }
 
-struct tab_entry *match_operands_to_mnumonic(struct tab_entry *tab_match, const char *query_string)
+struct tab_entry *match_operands_to_mnumonic(const char *query_string, struct tab_entry *tab_match)
 {
     char current_mnumonic[MNUMONIC_TXT_LENGTH];
     struct tab_entry *tab_tmp;
@@ -178,6 +178,8 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
         free(query_string);
     } else {
         // wasn't in tab file, preprocessor directive?
+        set_not_reduced_flag(tmp_i);
+
         if ((strcmp(tmp_i->mnumonic, ".DW") == 0) ||
                 (strcmp(tmp_i->mnumonic, ".WORD") == 0)) {
 
@@ -189,7 +191,6 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
 
         } else if (strcmp(tmp_i->mnumonic, ".ORG") == 0) {
             //set assumed PC register value
-
         } else {
             if (add_symbol(tmp_i)) {
                 //reached word not in table file, also not understood by zasm2
@@ -198,6 +199,15 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
             }
         }
     }
+}
+
+void set_not_reduced_flag(struct instruction *tmp_i) {
+      if (tmp_i->op_num)  {
+        tmp_i->not_reduced = 1;
+      } else {
+          printf("bad instruction: %s\n", tmp_i->mnumonic);
+          do_error_msg(ERR_PARSE);
+      }
 }
 
 /* add symbol to symbol table (_textShadow = $f34e) etc */
@@ -228,7 +238,7 @@ int add_symbol(struct instruction *tmp_i)
 
 struct tab_entry *match_mnumonic_with_query_string(char *query_string, struct tab_entry *tab_match)
 {
-    if (!(tab_match = match_operands_to_mnumonic(tab_match, query_string))) {
+    if (!(tab_match = match_operands_to_mnumonic(query_string, tab_match ))) {
         //check if one operand is value or label
         printf("***query_string: %s\n", query_string);
         printf("something fell through - not good\n");
@@ -520,6 +530,20 @@ int pass_second(struct instruction *root)
  */
 
 #ifdef DEBUG
+    instd = root;
+    printf("reduced\n");
+    //loop through instructions
+    while (instd)
+    {
+        if (!instd->not_reduced) {
+            printf("   inst: %s  : ", instd->mnumonic);
+            printf("matched_tab: %p  :\n",  instd->matched_tab);
+            for(i = 0; i < instd->op_num; i++)
+                printf("\t:opnd: %s\n", instd->operands[i]);
+        }
+        instd = instd->next;
+    }
+
     instd = root;
     printf("not_reduced\n");
     //loop through instructions
