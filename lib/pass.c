@@ -541,6 +541,11 @@ int pass_second(struct instruction *root)
             for(i = 0; i < instd->op_num; i++)
                 printf("\t:opnd: %s\n", instd->operands[i]);
         }
+        if (instd->matched_tab)
+            printf("\tsize: %d  : \n", instd->matched_tab->size);
+        else
+            printf("\tNOSIZE: inst %s, op_num %d : \n", instd->mnumonic, instd->op_num);
+
         instd = instd->next;
     }
 
