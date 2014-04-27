@@ -11,3 +11,4 @@ src/woo
 src/*.swp
 lib/*.swp
 src/zasm
+src/zasm.exe
