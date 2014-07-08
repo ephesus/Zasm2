@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT(zasm, 0a, James Rubingh <james@wrive.com>)
+AC_INIT(zasm, 0.1a, James Rubingh <james@wrive.com>)
 AC_CONFIG_SRCDIR([src/zasm.c])
 AC_CONFIG_HEADER([config.h])
 
