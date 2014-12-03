@@ -26,8 +26,8 @@ static struct label_entry *new_label();
 static struct instruction *pass_first(FILE *, struct tab_entry*);
 static struct instruction *parse_source(FILE *, struct instruction*, struct tab_entry*);
 static struct symbol_entry *new_symbol();
-static struct tab_entry *look_with_query_string(char *, struct tab_entry *);
 static struct tab_entry *match_mnumonic(struct tab_entry *, struct instruction *);
+static struct tab_entry *match_mnumonic_with_query_string(char *, struct tab_entry *);
 static struct tab_entry *match_operands_to_mnumonic(struct tab_entry *, const char *);
 
 static void append_string(char *, const char *);

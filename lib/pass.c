@@ -171,7 +171,7 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
 
         //only if there are operands try to match them
         if (tmp_i->op_num)
-            tab_match = look_with_query_string(query_string, tab_match);
+            tab_match = match_mnumonic_with_query_string(query_string, tab_match);
 
         found_correct_tab_entry(tmp_i, tab_match);
 
@@ -227,7 +227,7 @@ int add_symbol(struct instruction *tmp_i)
     return 1;
 }
 
-struct tab_entry *look_with_query_string(char *query_string, struct tab_entry *tab_match)
+struct tab_entry *match_mnumonic_with_query_string(char *query_string, struct tab_entry *tab_match)
 {
     if (!(tab_match = match_operands_to_mnumonic(tab_match, query_string))) {
         //check if one operand is value or label
