@@ -103,14 +103,10 @@ char *capitalize(char *buf)
  * instruction in the TABLE file. The instruction is already
  * matched so it's only the operands
  */
-char *calculate_query_string(struct instruction *tmp_i)
+char *calculate_query_string(struct instruction *tmp_i, char *query)
 {
-    char *query;
     char tmp_str[10];
     int i;
-
-    query = (char *) malloc(INSTRUCTION_BUFFER_SIZE);
-    query[0] = '\0';
 
     for (i = 0; i < tmp_i->op_num; i++)
     {
@@ -165,9 +161,12 @@ void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)
     struct tab_entry *tab_temp;
     char *query_string;
 
+
     if (tab_match = match_mnumonic(tabroot, tmp_i)) {
+        query_string = (char *) malloc(INSTRUCTION_BUFFER_SIZE);
+        query_string[0] = '\0';
         //mnumonic is found in tab file
-        query_string = calculate_query_string(tmp_i);
+        calculate_query_string(tmp_i, query_string);
 
         //only if there are operands try to match them
         if (tmp_i->op_num)
