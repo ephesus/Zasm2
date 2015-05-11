@@ -8,11 +8,7 @@
  *  査読お願いします!
  */
 
-int assemble(struct tab_entry *, FILE *);
-int write_to_file(struct instruction *);
-
 static char *calculate_query_string(struct instruction *, char *);
-static char *remove_whitespace(char *);
 
 static int add_symbol(struct instruction *);
 static int apply_table(struct instruction *, struct tab_entry*);
@@ -34,6 +30,7 @@ static void append_string(char *, const char *);
 static void attach_label(char *, struct instruction *);
 static void calculate_opcode(struct tab_entry*, struct instruction *);
 static void found_correct_tab_entry(struct instruction *, struct tab_entry *);
+static void remove_whitespace(char *);
 
 enum Z_DIRECTIVE {
     Z_DB,
