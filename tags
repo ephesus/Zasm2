@@ -1,0 +1,141 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ASSOC_LEFT	lib/shunt.c	/^enum {ASSOC_NONE=0, ASSOC_LEFT, ASSOC_RIGHT};$/;"	e	enum:__anon1	file:
+ASSOC_NONE	lib/shunt.c	/^enum {ASSOC_NONE=0, ASSOC_LEFT, ASSOC_RIGHT};$/;"	e	enum:__anon1	file:
+ASSOC_RIGHT	lib/shunt.c	/^enum {ASSOC_NONE=0, ASSOC_LEFT, ASSOC_RIGHT};$/;"	e	enum:__anon1	file:
+DEBUG	include/zasm.h	/^#define DEBUG$/;"	d
+DispRLE	src/test.asm	/^DispRLE:$/;"	l
+DispRLEC	src/test.asm	/^DispRLEC:$/;"	l
+DispRLEL	src/test.asm	/^DispRLEL:$/;"	l
+DispRLERun	src/test.asm	/^DispRLERun:$/;"	l
+DispRLERunL	src/test.asm	/^DispRLERunL:$/;"	l
+ERR_BADLABEL	include/zasm.h	/^#define ERR_BADLABEL /;"	d
+ERR_MALLOC	include/zasm.h	/^#define ERR_MALLOC /;"	d
+ERR_PARSE	include/zasm.h	/^#define ERR_PARSE /;"	d
+INSTRUCTION_BUFFER_SIZE	include/zasm.h	/^#define INSTRUCTION_BUFFER_SIZE /;"	d
+MAXNUMSTACK	lib/shunt.c	/^#define MAXNUMSTACK /;"	d	file:
+MAXOPSTACK	lib/shunt.c	/^#define MAXOPSTACK /;"	d	file:
+MNUMONIC_TXT_LENGTH	include/zasm.h	/^#define MNUMONIC_TXT_LENGTH /;"	d
+NUM_REGISTERS_TO_CHECK	lib/pass.h	/^#define NUM_REGISTERS_TO_CHECK /;"	d
+PUT2L	include/zasm.h	/^#define PUT2L(/;"	d
+PUT4L	include/zasm.h	/^#define PUT4L(/;"	d
+PUT4M	include/zasm.h	/^#define PUT4M(/;"	d
+REGISTERS	lib/pass.h	/^const char *REGISTERS[] = {$/;"	v
+TABFILE_BUFFER_SIZE	include/zasm.h	/^#define TABFILE_BUFFER_SIZE /;"	d
+UNKNOWN_VALUE	include/zasm.h	/^    unsigned int UNKNOWN_VALUE;$/;"	m	struct:tab_entry
+UNKNOWN_VALUE2	include/zasm.h	/^    int UNKNOWN_VALUE2;$/;"	m	struct:tab_entry
+UNKNOWN_VALUE3	include/zasm.h	/^    int UNKNOWN_VALUE3;$/;"	m	struct:tab_entry
+ZASM_H	include/zasm.h	/^#define ZASM_H$/;"	d
+Z_DB	lib/pass.h	/^    Z_DB,$/;"	e	enum:Z_DIRECTIVE
+Z_DIRECTIVE	lib/pass.h	/^enum Z_DIRECTIVE {$/;"	g
+Z_DW	lib/pass.h	/^    Z_DW,$/;"	e	enum:Z_DIRECTIVE
+Z_END	lib/pass.h	/^    Z_END$/;"	e	enum:Z_DIRECTIVE
+Z_ORG	lib/pass.h	/^    Z_ORG,$/;"	e	enum:Z_DIRECTIVE
+_textShadow	src/test.asm	/^_textShadow = $9f00$/;"	d
+add_label	lib/pass.c	/^void add_label(char *ptr, struct instruction *inst)$/;"	f
+add_symbol	lib/pass.c	/^int add_symbol(struct instruction *tmp_i)$/;"	f
+address	include/zasm.h	/^    unsigned int address;$/;"	m	struct:instruction
+address	include/zasm.h	/^    unsigned int address;$/;"	m	struct:symbol_entry
+append_string	lib/pass.c	/^void append_string(char *target, const char *addition)$/;"	f
+assemble	lib/pass.c	/^int assemble(struct tab_entry *tabroot, FILE *infile)$/;"	f
+assembled	include/zasm.h	/^    unsigned short int assembled;$/;"	m	struct:instruction
+assoc	lib/shunt.c	/^    int assoc;$/;"	m	struct:op_s	file:
+byte	include/zasm.h	/^typedef unsigned char byte;$/;"	t
+calculate_opcode	lib/pass.c	/^void calculate_opcode(struct tab_entry *tabroot, struct instruction *tmp_i)$/;"	f
+calculate_query_string	lib/pass.c	/^char *calculate_query_string(struct instruction *tmp_i, char *query)$/;"	f
+capitalize	lib/pass.c	/^char *capitalize(char *buf)$/;"	f
+check_for_register	lib/pass.c	/^int check_for_register(const char *operand)$/;"	f
+comma	include/zasm.h	/^#define comma /;"	d
+current_address	src/zasm.c	/^unsigned int current_address = 0;$/;"	v
+do_error	src/zasm.c	/^void do_error()$/;"	f
+do_error_msg	src/zasm.c	/^void do_error_msg(char *message)$/;"	f
+eval	lib/shunt.c	/^    int (*eval)(int a1, int a2);$/;"	m	struct:op_s	file:
+eval_add	lib/shunt.c	/^int eval_add(int a1, int a2) $/;"	f
+eval_div	lib/shunt.c	/^int eval_div(int a1, int a2) $/;"	f
+eval_exp	lib/shunt.c	/^int eval_exp(int a1, int a2)$/;"	f
+eval_mod	lib/shunt.c	/^int eval_mod(int a1, int a2) $/;"	f
+eval_mul	lib/shunt.c	/^int eval_mul(int a1, int a2) $/;"	f
+eval_sub	lib/shunt.c	/^int eval_sub(int a1, int a2) $/;"	f
+eval_uminus	lib/shunt.c	/^int eval_uminus(int a1, int a2) $/;"	f
+found_correct_tab_entry	lib/pass.c	/^void found_correct_tab_entry(struct instruction *tmp_i, struct tab_entry *match)$/;"	f
+free_lists	src/zasm.c	/^void free_lists()$/;"	f
+get_operands	lib/pass.c	/^struct instruction *get_operands(struct instruction *cur)$/;"	f
+getop	lib/shunt.c	/^struct op_s *getop(char ch)$/;"	f
+hex_code	include/zasm.h	/^    char hex_code[10];$/;"	m	struct:tab_entry
+instruction	include/zasm.h	/^    struct instruction *instruction;$/;"	m	struct:label_entry	typeref:struct:label_entry::instruction
+instruction	include/zasm.h	/^    struct instruction *instruction;$/;"	m	struct:symbol_entry	typeref:struct:symbol_entry::instruction
+instruction	include/zasm.h	/^struct instruction {$/;"	s
+label1	src/test.asm	/^label1:$/;"	l
+label2	src/test.asm	/^label2:$/;"	l
+label_current	src/zasm.c	/^struct label_entry *label_current = NULL;$/;"	v	typeref:struct:label_entry
+label_entry	include/zasm.h	/^struct label_entry {$/;"	s
+label_root	src/zasm.c	/^struct label_entry* label_root = NULL; \/\/data segment should be initialized to 0, but lets not assume$/;"	v	typeref:struct:label_entry
+labil	src/test2.asm	/^labil:$/;"	l
+linenumber	src/zasm.c	/^double linenumber = 0;$/;"	v
+main	src/zasm.c	/^int main(int ac, char **av)$/;"	f
+match_mnumonic	lib/pass.c	/^struct tab_entry *match_mnumonic(struct tab_entry *tabroot, struct instruction *instruction)$/;"	f
+match_mnumonic_with_query_string	lib/pass.c	/^struct tab_entry *match_mnumonic_with_query_string(char *query_string, struct tab_entry *tab_match)$/;"	f
+match_operands_to_mnumonic	lib/pass.c	/^struct tab_entry *match_operands_to_mnumonic(const char *query_string, struct tab_entry *tab_match)$/;"	f
+matched_tab	include/zasm.h	/^    struct tab_entry *matched_tab;$/;"	m	struct:instruction	typeref:struct:instruction::tab_entry
+mnumonic	include/zasm.h	/^    char mnumonic[MNUMONIC_TXT_LENGTH];$/;"	m	struct:instruction
+mnumonic	include/zasm.h	/^    char mnumonic[MNUMONIC_TXT_LENGTH];$/;"	m	struct:tab_entry
+name	include/zasm.h	/^    char *name;$/;"	m	struct:label_entry
+name	include/zasm.h	/^    char *name;$/;"	m	struct:symbol_entry
+new_instruction	lib/pass.c	/^struct instruction *new_instruction()$/;"	f
+new_label	lib/pass.c	/^struct label_entry *new_label()$/;"	f
+new_symbol	lib/pass.c	/^struct symbol_entry *new_symbol()$/;"	f
+new_tab_entry	src/zasm.c	/^struct tab_entry* new_tab_entry(char *buf)$/;"	f
+next	include/zasm.h	/^    struct instruction *next, *previous;$/;"	m	struct:instruction	typeref:struct:instruction::instruction
+next	include/zasm.h	/^    struct label_entry *next;$/;"	m	struct:label_entry	typeref:struct:label_entry::label_entry
+next	include/zasm.h	/^    struct symbol_entry *next;$/;"	m	struct:symbol_entry	typeref:struct:symbol_entry::symbol_entry
+next	include/zasm.h	/^    struct tab_entry *next;$/;"	m	struct:tab_entry	typeref:struct:tab_entry::tab_entry
+nnumstack	lib/shunt.c	/^int nnumstack;$/;"	v
+nopstack	lib/shunt.c	/^int nopstack;$/;"	v
+not_reduced	include/zasm.h	/^    unsigned short int not_reduced;$/;"	m	struct:instruction
+numstack	lib/shunt.c	/^int numstack[MAXNUMSTACK];$/;"	v
+op	lib/shunt.c	/^    char op;$/;"	m	struct:op_s	file:
+op_num	include/zasm.h	/^    unsigned short int op_num;$/;"	m	struct:instruction
+op_s	lib/shunt.c	/^struct op_s {$/;"	s	file:
+opcode	include/zasm.h	/^    int opcode;$/;"	m	struct:tab_entry
+opcode	include/zasm.h	/^    unsigned int opcode;$/;"	m	struct:instruction
+operands	include/zasm.h	/^    char **operands;$/;"	m	struct:instruction
+operands	include/zasm.h	/^    char operands[10];$/;"	m	struct:tab_entry
+ops	lib/shunt.c	/^} ops[]={$/;"	v	typeref:struct:op_s
+opstack	lib/shunt.c	/^struct op_s *opstack[MAXOPSTACK];$/;"	v	typeref:struct:op_s
+parse_source	lib/pass.c	/^struct instruction *parse_source(FILE *infile, struct instruction* initial_root, struct tab_entry *tabroot)$/;"	f
+pass_first	lib/pass.c	/^struct instruction *pass_first(FILE *infile, struct tab_entry *tabroot)$/;"	f
+pass_second	lib/pass.c	/^int pass_second(struct instruction *root)$/;"	f
+pop_numstack	lib/shunt.c	/^int pop_numstack()$/;"	f
+pop_opstack	lib/shunt.c	/^struct op_s *pop_opstack()$/;"	f
+prec	lib/shunt.c	/^    int prec;$/;"	m	struct:op_s	file:
+previous	include/zasm.h	/^    struct instruction *next, *previous;$/;"	m	struct:instruction	typeref:struct:instruction::
+push_numstack	lib/shunt.c	/^void push_numstack(int num)$/;"	f
+push_opstack	lib/shunt.c	/^void push_opstack(struct op_s *op)$/;"	f
+read_table	src/zasm.c	/^struct tab_entry *read_table(FILE *tabfile)$/;"	f
+remove_whitespace	lib/pass.c	/^void remove_whitespace(char * buf)$/;"	f
+set_not_reduced_flag	lib/pass.c	/^void set_not_reduced_flag(struct instruction *tmp_i) {$/;"	f
+show_help	src/help.c	/^void show_help(int returncode) $/;"	f
+shunt	lib/shunt.c	/^int shunt(char *expression)$/;"	f
+shunt_error	lib/shunt.c	/^int shunt_error;$/;"	v
+shunt_op	lib/shunt.c	/^void shunt_op(struct op_s *op)$/;"	f
+size	include/zasm.h	/^    int size;$/;"	m	struct:tab_entry
+starting	src/test.asm	/^starting:$/;"	l
+strip_comment	lib/pass.c	/^void strip_comment(char *ptr)$/;"	f
+symbol_current	src/zasm.c	/^struct symbol_entry* symbol_current = NULL;$/;"	v	typeref:struct:symbol_entry
+symbol_entry	include/zasm.h	/^struct symbol_entry {$/;"	s
+symbol_root	src/zasm.c	/^struct symbol_entry* symbol_root = NULL;$/;"	v	typeref:struct:symbol_entry
+tab_entry	include/zasm.h	/^struct tab_entry {$/;"	s
+tab_whitespace	include/zasm.h	/^#define tab_whitespace /;"	d
+tiprog	src/zasm.c	/^int tiprog = 0;$/;"	v
+tistring	src/zasm.c	/^int tistring = 0;$/;"	v
+type	include/zasm.h	/^    int type;$/;"	m	struct:tab_entry
+unary	lib/shunt.c	/^    int unary;$/;"	m	struct:op_s	file:
+validate_label	lib/pass.c	/^int validate_label(char *ptr)$/;"	f
+validate_symbol	lib/pass.c	/^int validate_symbol(char *ptr)$/;"	f
+verbose	src/zasm.c	/^int verbose = 0;$/;"	v
+whitespace	include/zasm.h	/^#define whitespace /;"	d
+write_to_file	lib/pass.c	/^int write_to_file(struct instruction * root)$/;"	f
