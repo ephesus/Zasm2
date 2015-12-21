@@ -1,4 +1,4 @@
   ret
-  $2
+  .db $2
 labil:
  lets crash
