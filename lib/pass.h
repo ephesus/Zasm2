@@ -25,12 +25,13 @@ static struct instruction *parse_source(FILE *, struct instruction*, struct tab_
 static struct symbol_entry *new_symbol();
 static struct tab_entry *match_mnumonic(struct tab_entry *, struct instruction *);
 static struct tab_entry *match_mnumonic_with_query_string(char *, struct tab_entry *);
-static struct tab_entry *match_operands_to_mnumonic(struct tab_entry *, const char *);
+static struct tab_entry *match_operands_to_mnumonic(const char *, struct tab_entry *);
 
 static void append_string(char *, const char *);
 static void add_label(char *, struct instruction *);
 static void calculate_opcode(struct tab_entry*, struct instruction *);
 static void found_correct_tab_entry(struct instruction *, struct tab_entry *);
+static void set_not_reduced_flag(struct instruction *);
 static void remove_whitespace(char *);
 
 enum Z_DIRECTIVE {
