@@ -1,5 +1,7 @@
 SUBDIRS = doc lib src
 
+debug: all
+
 all:
 	for dir in ${SUBDIRS}; do \
 	 (cd $$dir; ${MAKE} all); \
@@ -26,4 +28,6 @@ install:
 
 uninstall:
 	 (cd src; ${MAKE} uninstall);
+
+debug:
 

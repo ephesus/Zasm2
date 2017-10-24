@@ -6,6 +6,7 @@ CFLAGS = -O2 -ffast-math -fomit-frame-pointer
 CC = clang # or gcc
 OPTS = 
 
+all: CFLAGS += -g
 all:	help.o zasm.o
 	$(CC) $(OPTS) -o zasm $(CFLAGS) $(OBJS)
 

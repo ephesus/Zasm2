@@ -13,3 +13,4 @@ lib/*.swp
 src/zasm
 src/zasm.exe
 TODO
+tags
