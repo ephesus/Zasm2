@@ -16,9 +16,10 @@
 
 void show_help(int returncode) 
 {
-    puts("(C) 2002 James Lee Rubingh");
+    puts("zasm (switches) [infile] [outfile]\n");
     printf("Zasm %s\n",PACKAGE_VERSION);
-    puts("zasm (switches) [infile] [outfile]");
+    puts("(C) 2002 James Lee Rubingh\n");
+
     puts("-v\tbe --verbose");
     puts("-V\tshow program --version");
     puts("-t\tcreate a ti86 program");
