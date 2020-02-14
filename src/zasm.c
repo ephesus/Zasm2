@@ -152,6 +152,7 @@ int main(int ac, char **av)
             case 'T':
                 /* set up table file handle */
                 if (!(tabfile = fopen(optarg, "r"))) {
+                    optarg = optarg ? optarg : "No file";
                     printf("Error opening tabfile: %s\n", optarg);
                     exit(1);
                 }
@@ -174,7 +175,11 @@ int main(int ac, char **av)
     }
 
     if (!(infile = fopen(av[optind], "r"))) {
-        printf("error: with source file \"%s\"\n", av[optind]);
+        if (av[optind]) {
+            printf("error: with source file \"%s\"\n", av[optind]);
+        } else {
+            show_help(0);
+        }
         exit(1);
     }
 
