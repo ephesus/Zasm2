@@ -20,6 +20,6 @@ Uninstall:
  rm /usr/local/bin/zasm
  rm -rf /usr/local/share/zasm
 
-Suggestions, bugfixes, complaints, flames to:
-ephesus@gmail.com
+Suggestions, bugfixes, complaints to:
+ephesus @gmail
 
