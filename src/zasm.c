@@ -4,9 +4,7 @@
 
     Copyright (2002) James Rubingh
     Released under the GPL v2
-
-    査読お願いします!
-    */
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
