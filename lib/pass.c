@@ -16,6 +16,39 @@
 #include "../config.h"
 #include "pass.h"
 
+const char *REGISTERS[] = {
+    //registers
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "L",
+    "BC",
+    "DE",
+    "HL",
+    "AF",
+    "IX",
+    "IY",
+    "IXL",
+    "IYL",
+    "IXH",
+    "IYH",
+    "PC",
+    "SP",
+    //flags
+    "NC",
+    "NZ",
+    "Z",
+    "R",
+    "PE",
+    "PO",
+};
+
 void strip_comment(char *ptr)
 {
     /*! replace any ; or \n with a terminating null */
@@ -117,7 +150,7 @@ char *calculate_query_string(struct instruction *tmp_i, char *query)
         if (check_for_register(tmp_i->operands[i])) {
             append_string(query, tmp_i->operands[i]);
         } else {
-            //already know it's not a register, if alphanum its a label/var
+            //already know it's not a register, if alphanum it's a label/var
             if (isalpha(tmp_i->operands[i][0])) {
                 tmp_i->not_reduced =1;
                 append_string(query, "*");
@@ -271,13 +304,13 @@ void found_correct_tab_entry(struct instruction *tmp_i, struct tab_entry *match)
 
 struct symbol_entry *new_symbol()
 {
-    struct symbol_entry *tmp;
+    struct symbol_entry *new_sym;
 
-    if (!(tmp = (struct symbol_entry*) malloc(sizeof(struct symbol_entry)))) {
+    if (!(new_sym = (struct symbol_entry*) malloc(sizeof(struct symbol_entry)))) {
         do_error_msg(ERR_MALLOC);
     }
-    memset(tmp, 0, sizeof(struct symbol_entry));
-    return tmp;
+    memset(new_sym, 0, sizeof(struct symbol_entry));
+    return new_sym;
 }
 
 struct label_entry *new_label()
@@ -346,6 +379,7 @@ struct instruction *get_operands(struct instruction *cur)
 {
     int cur_op_num;
     char *buf;
+    char **tmp_ops;
 
     /* check for operands */
     cur_op_num = 0;
@@ -353,13 +387,19 @@ struct instruction *get_operands(struct instruction *cur)
     {
         remove_whitespace(buf); //remove any tabs etc.
         if (strlen(buf) > 0) {
-            if (!cur->operands)
+            if (!cur->operands) {
                 cur->operands = (char **) malloc(sizeof( char *));
-            else
-                cur->operands = (char **) realloc(cur->operands, (sizeof(char *)*(cur_op_num+1)));
+            } else {
+				//use a tmp pointer in case realloc fails to avoid losing original pointer
+				char **tmp_ops = (char **) realloc(cur->operands, sizeof(char *) * (cur_op_num + 1));
+				if (!tmp_ops) {
+					do_error_msg(ERR_MALLOC);
+				}
+				cur->operands = tmp_ops;
+			}
 
             capitalize(buf);
-            cur->operands[cur_op_num] = (char *) malloc(strlen(buf) );
+            cur->operands[cur_op_num] = (char *) malloc(strlen(buf)) + 1;
             strcpy(cur->operands[cur_op_num], buf);
 
             cur->op_num = ++cur_op_num;
@@ -474,7 +514,7 @@ void add_label(char *ptr, struct instruction *inst)
         label_current->next = tmp;  //label_current is global extern'd
 
     label_current = tmp;
-    tmp->name = (char *)malloc(strlen(ptr) * sizeof(char));
+    tmp->name = (char *)malloc(strlen(ptr) * sizeof(char)+ 1);
     strcpy(tmp->name, ptr);
 }
 

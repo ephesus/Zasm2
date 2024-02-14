@@ -4,9 +4,7 @@
 
     Copyright (2002) James Rubingh
     Released under the GPL v2
-
-    査読お願いします!
-    */
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -42,12 +40,84 @@ void do_error_msg(char *message)
     exit(EIO);
 }
 
-void free_lists()
-{
-    /* can't free symbol_root before instruction_root because
-     * s references i
-     */
+// Helper to free the symbol table linked list
+void free_symbols(struct symbol_entry *root) {
+    struct symbol_entry *current = root;
+    while (current != NULL) {
+        struct symbol_entry *next_node = current->next;
+        // 'name' points to 'tmp_i->mnumonic' (statically allocated array in instruction),
+        // do NOT free(current->name) or it will double-free when the instruction is deleted.
+        free(current);
+        current = next_node;
+    }
+}
 
+void free_labels(struct label_entry *root) {
+    struct label_entry *current = root;
+    while (current != NULL) {
+        struct label_entry *next_node = current->next;
+        if (current->name) {
+            free(current->name); // Allocated with malloc in add_label()
+        }
+        free(current);
+        current = next_node;
+    }
+}
+
+// Helper to free the main instruction abstract syntax tree
+void free_instructions(struct instruction *root) {
+    struct instruction *current = root;
+    while (current != NULL) {
+        struct instruction *next_node = current->next;
+        
+        // Free the dynamically allocated array of operand strings (from get_operands)
+        if (current->operands) {
+            for (int i = 0; i < current->op_num; i++) {
+                if (current->operands[i]) {
+                    free(current->operands[i]);
+                }
+            }
+            free(current->operands);
+        }
+        
+        free(current);
+        current = next_node;
+    }
+}
+
+// free the malloc'd Z80 instruction definition table list
+void free_tab_entries(struct tab_entry *root) {
+    struct tab_entry *current = root;
+    while (current != NULL) {
+        struct tab_entry *next_node = current->next;
+        free(current);
+        current = next_node;
+    }
+}
+
+void free_lists(struct instruction *inst_root, struct tab_entry *t_root)
+{
+    /* 1. Free symbol_root before instruction_root because s references i */
+    if (symbol_root != NULL) {
+        free_symbols(symbol_root);
+        symbol_root = NULL; // Clear global pointer
+        symbol_current = NULL;
+    }
+
+    /* 2. Free label_root (contains pointers to instructions) */
+    if (label_root != NULL) {
+        free_labels(label_root);
+        label_root = NULL; // Clear global pointer
+        label_current = NULL;
+    }
+
+    if (inst_root != NULL) {
+        free_instructions(inst_root);
+    }
+
+    if (t_root != NULL) {
+        free_tab_entries(t_root);
+    }
 }
 
 struct tab_entry* new_tab_entry(char *buf)

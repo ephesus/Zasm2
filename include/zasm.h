@@ -6,6 +6,8 @@
 #ifndef ZASM_H
 #define ZASM_H
 
+#include <stdio.h>
+
 #define INSTRUCTION_BUFFER_SIZE 1000
 #define TABFILE_BUFFER_SIZE 500
 #define MNUMONIC_TXT_LENGTH 16
@@ -77,7 +79,11 @@ extern struct symbol_entry *symbol_current;
 extern struct tab_entry *read_table(FILE*);
 extern void do_error_msg(char *);
 extern void do_error();
-static void free_lists();
+static void free_lists(struct instruction *, struct tab_entry *);
+static void free_symbols(struct symbol_entry *);
+static void free_labels(struct label_entry *);
+static void free_instructions(struct instruction *);
+static void free_tab_entries(struct tab_entry *);
 struct tab_entry *new_tab_entry(char *);
 
 /* pass.c */

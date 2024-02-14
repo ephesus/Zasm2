@@ -8,6 +8,8 @@
  *  査読お願いします!
  */
 
+#include <stdio.h>
+
 static char *calculate_query_string(struct instruction *, char *);
 
 static int add_symbol(struct instruction *);
@@ -41,37 +43,9 @@ enum Z_DIRECTIVE {
     Z_END
 };
 
-const char *REGISTERS[] = {
-    //registers
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "L",
-    "BC",
-    "DE",
-    "HL",
-    "AF",
-    "IX",
-    "IY",
-    "IXL",
-    "IYL",
-    "IXH",
-    "IYH",
-    "PC",
-    "SP",
-    //flags
-    "NC",
-    "NZ",
-    "Z",
-    "R",
-    "PE",
-    "PO",
-};
+#ifndef REGISTERS_H
+#define REGISTERS_H
+extern const char *REGISTERS[];
+#endif
 
 #define NUM_REGISTERS_TO_CHECK (sizeof(REGISTERS) / sizeof(REGISTERS[0]))
