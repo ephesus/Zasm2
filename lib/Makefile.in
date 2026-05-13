@@ -1,5 +1,5 @@
 OPTS = 
-CC = clang # or gcc
+CC = gcc # or gcc
 
 all:
 	$(CC) $(CFLAGS) $(OPTS) -c pass.c -o pass.o	
