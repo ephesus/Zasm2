@@ -23,3 +23,5 @@ Uninstall:
 Suggestions, bugfixes, complaints to:
 ephesus @gmail
 
+run with jemalloc:
+LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2 ./zasm test.asm outputfile

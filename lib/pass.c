@@ -399,7 +399,7 @@ struct instruction *get_operands(struct instruction *cur)
 			}
 
             capitalize(buf);
-            cur->operands[cur_op_num] = (char *) malloc(strlen(buf)) + 1;
+            cur->operands[cur_op_num] = (char *) malloc(strlen(buf) + 1);
             strcpy(cur->operands[cur_op_num], buf);
 
             cur->op_num = ++cur_op_num;
