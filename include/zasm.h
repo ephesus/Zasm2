@@ -89,7 +89,7 @@ struct tab_entry *new_tab_entry(char *);
 /* pass.c */
 extern unsigned int current_address;
 extern void strip_comment(char *);
-extern int assemble(struct tab_entry *, FILE *);
+extern struct instruction *assemble(struct tab_entry *, FILE *);
 extern int write_to_file(struct instruction *);
 
 
