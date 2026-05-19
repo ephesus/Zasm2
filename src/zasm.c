@@ -274,6 +274,8 @@ int main(int ac, char **av)
 
     free_lists(root, tab_root);
 
+    fclose(tabfile); fclose(infile); fclose(outfile);
+
     return 0;
 }
 

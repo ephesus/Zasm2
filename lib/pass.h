@@ -15,6 +15,7 @@ static char *calculate_query_string(struct instruction *, char *);
 static int add_symbol(struct instruction *);
 static int apply_table(struct instruction *, struct tab_entry*);
 static int check_for_symbol(const char *);
+static int pass_second(struct instruction *);
 static int validate_label(char *);
 static int validate_symbol(char *);
 
@@ -22,7 +23,6 @@ static struct instruction *get_operands(struct instruction *);
 static struct instruction *new_instruction();
 static struct label_entry *new_label();
 static struct instruction *pass_first(FILE *, struct tab_entry*);
-static struct instruction *pass_second(struct instruction *);
 static struct instruction *parse_source(FILE *, struct instruction*, struct tab_entry*);
 static struct symbol_entry *new_symbol();
 static struct tab_entry *match_mnumonic(struct tab_entry *, struct instruction *);

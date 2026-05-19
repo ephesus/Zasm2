@@ -66,7 +66,7 @@ void strip_comment(char *ptr)
 /* starting new file */
 struct instruction *assemble(struct tab_entry *tabroot, FILE *infile)
 {
-    struct instruction *result = NULL;
+    int result = 0;
     struct instruction *root;
     linenumber = 0;
 
@@ -74,7 +74,7 @@ struct instruction *assemble(struct tab_entry *tabroot, FILE *infile)
     root = pass_first(infile, tabroot);
     result = pass_second(root);
 
-    return result;
+    return root;
 }
 
 int write_to_file(struct instruction * root)
@@ -366,9 +366,7 @@ struct instruction *pass_first(FILE *infile, struct tab_entry *tabroot)
     /** build up the basic tree from the source file(s)
      * descends recursively into included source files
      */
-    root = parse_source(infile, root, tabroot);
-
-    return root;
+    return parse_source(infile, root, tabroot);
 }
 
 /* current line has first token removed (instruction) and comments
@@ -558,7 +556,7 @@ int validate_symbol(char *ptr)
 /**  Go back through the instruction tree and using the list of
  *  labels, patch up all the forward references
  */
-struct instruction *pass_second(struct instruction *root)
+int pass_second(struct instruction *root)
 {
     struct label_entry *cur = NULL;
     struct symbol_entry *cur_sym = NULL;
