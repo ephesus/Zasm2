@@ -64,12 +64,12 @@ void strip_comment(char *ptr)
 }
 
 /* starting new file */
-int assemble(struct tab_entry *tabroot, FILE *infile)
+struct instruction *assemble(struct tab_entry *tabroot, FILE *infile)
 {
-    int result = 0;
+    struct instruction *result = NULL;
+    struct instruction *root;
     linenumber = 0;
 
-    struct instruction *root;
 
     root = pass_first(infile, tabroot);
     result = pass_second(root);
@@ -558,7 +558,7 @@ int validate_symbol(char *ptr)
 /**  Go back through the instruction tree and using the list of
  *  labels, patch up all the forward references
  */
-int pass_second(struct instruction *root)
+struct instruction *pass_second(struct instruction *root)
 {
     struct label_entry *cur = NULL;
     struct symbol_entry *cur_sym = NULL;

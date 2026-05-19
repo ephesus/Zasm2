@@ -266,11 +266,13 @@ int main(int ac, char **av)
     /* read table file */
     tab_root = read_table(tabfile);
 
-    assemble(tab_root, infile);
+    root = assemble(tab_root, infile);
 
     if (write_to_file(root)) {
         printf("error\n");
     }
+
+    free_lists(root, tab_root);
 
     return 0;
 }
