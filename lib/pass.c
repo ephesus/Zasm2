@@ -516,6 +516,7 @@ void add_label(char *ptr, struct instruction *inst)
         label_current->next = tmp;  //label_current is global extern'd
 
     label_current = tmp;
+    //+1 because strcpy copies the terminating \0 
     tmp->name = (char *)malloc(strlen(ptr) * sizeof(char)+ 1);
     strcpy(tmp->name, ptr);
 }
