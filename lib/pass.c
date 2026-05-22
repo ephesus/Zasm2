@@ -495,7 +495,11 @@ struct instruction *parse_source(FILE *infile, struct instruction* initial_root,
     }
 
     /* return either the head or the tail */
-    return initial_root == NULL ? inst_root : cur;
+    if (initial_root == NULL) {
+        free(cur);
+        return inst_root;
+    }
+    return cur;
 }
 
 /*  add a label_entry to the big list */
